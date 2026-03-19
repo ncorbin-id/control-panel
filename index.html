@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulation Launcher</title>
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --accent: #38bdf8;
+      --text: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: radial-gradient(circle at top, #020617, #0f172a);
+      color: var(--text);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .wrapper {
+      text-align: center;
+      padding: 40px;
+      background: rgba(30, 41, 59, 0.85);
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      max-width: 420px;
+      width: 90%;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 1.6rem;
+    }
+
+    p {
+      opacity: 0.8;
+      margin-bottom: 24px;
+    }
+
+    .launch-button {
+      display: inline-block;
+      padding: 14px 22px;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+
+      background: linear-gradient(180deg, #38bdf8, #0ea5e9);
+      color: #022c22;
+
+      transition: transform 0.1s ease, box-shadow 0.2s ease;
+    }
+
+    .launch-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(56, 189, 248, 0.35);
+    }
+
+    .launch-button:active {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <h1>Control Panel Simulation</h1>
+    <p>This is a temporary entry point. You’ll choose your learning mode here later.</p>
+
+    <button class="launch-button" onclick="goToPanel()">
+      Start Simulation
+    </button>
+  </div>
+
+  <script>
+    function goToPanel() {
+      window.location.href = "panel.html";
+    }
+  </script>
+
+</body>
+</html>

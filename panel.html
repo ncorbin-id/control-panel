@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Control Panel Simulation</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="instruction-panel">
+      <div class="blank-instructions"></div>
+    </aside>
+
+    <main class="panel-stage">
+      <section class="control-panel" aria-label="Phaser control panel">
+        <div class="panel-canvas">
+          <!-- SP Indicator -->
+          <div class="panel-item sp-indicator-group">
+            <label class="panel-label" for="light-sp">SP Indicator</label>
+            <div id="light-sp" class="indicator"></div>
+          </div>
+
+          <!-- EB Indicator -->
+          <div class="panel-item eb-indicator-group">
+            <label class="panel-label" for="light-eb">EB Indicator</label>
+            <div id="light-eb" class="indicator"></div>
+          </div>
+
+          <!-- MA Indicator -->
+          <div class="panel-item ma-indicator-group">
+            <label class="panel-label" for="light-ma">MA Indicator</label>
+            <div id="light-ma" class="indicator"></div>
+          </div>
+
+          <!-- PF Indicator -->
+          <div class="panel-item pf-indicator-group">
+            <label class="panel-label" for="light-pf">PF Indicator</label>
+            <div id="light-pf" class="indicator"></div>
+          </div>
+
+          <!-- SP Switch -->
+          <div class="panel-item sp-switch-group">
+            <button id="toggle-sp" class="sp-switch" type="button" aria-label="SP Switch">
+              <span class="sp-switch-knob"></span>
+            </button>
+            <div class="panel-label">SP Switch</div>
+          </div>
+
+          <!-- FM Button -->
+          <div class="panel-item fm-button-group">
+            <button id="fire-main" class="round-button" type="button" aria-label="FM Button"></button>
+            <div class="panel-label">FM Button</div>
+          </div>
+
+          <!-- FS Button -->
+          <div class="panel-item fs-button-group">
+            <button id="fire-secondary" class="round-button" type="button" aria-label="FS Button"></button>
+            <div class="panel-label">FS Button</div>
+          </div>
+
+          <!-- ES Selector -->
+          <div class="panel-item es-selector-group">
+            <div class="selector-shell">
+              <div class="selector-option option-ma">MA</div>
+              <div class="selector-option option-sa">SA</div>
+              <div class="selector-option option-n">N</div>
+
+              <div class="dial-wrap">
+                <button
+                  id="es-selector"
+                  class="dial"
+                  type="button"
+                  aria-label="ES Selector"
+                  aria-valuemin="0"
+                  aria-valuemax="2"
+                  aria-valuenow="2"
+                >
+                  <span class="dial-pointer"></span>
+                </button>
+              </div>
+            </div>
+            <div class="panel-label es-label">ES Selector</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
