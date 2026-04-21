@@ -2,7 +2,10 @@ import { isSelectorEnabled, areFireButtonsEnabled } from "./machine.js";
 import { updateInstructionsUI } from "./instructions.js";
 
 export function render(state, el, updateDebugPanel) {
-  // Indicators
+  /* =========================
+     Indicators
+  ========================= */
+
   el.spIndicator.classList.toggle(
     "warming",
     state.machine.power && state.machine.ebWarming && !state.machine.ebReady
@@ -17,10 +20,16 @@ export function render(state, el, updateDebugPanel) {
   el.maIndicator.classList.toggle("on", state.machine.chargedSource === "MA");
   el.pfIndicator.classList.toggle("on", state.machine.pfLit);
 
-  // SP switch
+  /* =========================
+     SP switch
+  ========================= */
+
   el.spSwitch.classList.toggle("on", state.machine.power);
 
-  // Selector position
+  /* =========================
+     Selector position
+  ========================= */
+
   el.esSelector.classList.remove("pos-ma", "pos-sa", "pos-n");
 
   if (state.machine.selector === "MA") {
@@ -37,7 +46,10 @@ export function render(state, el, updateDebugPanel) {
     el.esSelector.setAttribute("aria-valuetext", "Neutral");
   }
 
-  // Enable / disable controls
+  /* =========================
+     Enable / disable controls
+  ========================= */
+
   const selectorEnabled = isSelectorEnabled(state);
   const fireEnabled = areFireButtonsEnabled(state);
 
@@ -49,8 +61,23 @@ export function render(state, el, updateDebugPanel) {
   el.fmButton.setAttribute("aria-disabled", fireEnabled ? "false" : "true");
   el.fsButton.setAttribute("aria-disabled", fireEnabled ? "false" : "true");
 
-  // Guidance + debug
+  /* =========================
+     Panel message
+  ========================= */
+
+  if (el.panelMessage) {
+    el.panelMessage.innerHTML = state.ui.panelMessage || "";
+  }
+
+  /* =========================
+     Instructions UI
+  ========================= */
+
   updateInstructionsUI(state, el);
+
+  /* =========================
+     Debug panel
+  ========================= */
 
   if (typeof updateDebugPanel === "function") {
     updateDebugPanel(state);

@@ -21,6 +21,16 @@ export const state = {
     warmupTimer: null
   },
 
+  storage: {
+    successRecognized: false,
+    successCount: 0,
+    lastSuccessAt: null
+  },
+
+  ui: {
+    panelMessage: ""
+  },
+
   debug: {
     manualOverride: false
   }

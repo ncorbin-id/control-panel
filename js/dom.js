@@ -10,9 +10,9 @@ export function getDomElements() {
     fsButton: document.getElementById("fire-secondary"),
     esSelector: document.getElementById("es-selector"),
 
-    // Optional guidance hooks. Safe if they do not exist yet.
-    instructionsPanel: document.getElementById("instructions-panel"),
-    instructionsToggle: document.getElementById("instructions-toggle"),
-    instructionsLockMessage: document.getElementById("instructions-lock-message")
+    markSuccess: document.getElementById("mark-success"),
+    resetPanel: document.getElementById("reset-panel"),
+    testMe: document.getElementById("test-me"),
+    panelMessage: document.getElementById("panel-message")
   };
 }

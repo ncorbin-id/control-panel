@@ -3,18 +3,54 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Control Panel Simulation</title>
+  <title>Metacognition in Software Training</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="app">
     <aside class="instruction-panel">
-      <div class="blank-instructions"></div>
+      <details class="instruction-section task" open>
+        <summary>Your instructions</summary>
+        <div class="instructions">
+            <p>Your task is to fire phasers aboard a starship. First, you'll practice the procedure using the excerpt from the <i>Control Panel Instruction Manual</i>. When you're ready, you'll test your ability to fire phasers without guidance from the manual.</p>
+            <ol>
+              <li>Read through the <i>Control Panel Instruction Manual</i> and familiarize yourself with the control panel.</li>
+              <li>Practice firing phasers a few times on your own.
+                <p>When the PF indicator illuminates, select <b>Success</b> to mark the procedure successful and reset the control panel for another firing. If you get stuck, select <b>Reset</b> to reset the control panel back to its original state.</p>
+              </li>
+              <li>When you're ready, select <b>Test me</b> to test your ability to fire phasers on your own without guidance.</li>
+            </ol>
+        </div>
+      </details>
+      <details class="instruction-section manual" open>
+        <summary>Control Panel Instruction Manual</summary>
+        <div class="instructions">
+          <h2>Phasers</h2>
+          <p>This section of the control panel is used to bring the phaser system online, manage power during operation, and fire phasers. Note that this system can sometimes malfunction.</p>
+          <h3>Fire phasers</h3>
+          <ol>
+            <li>On the control panel, flip the <b>SP Switch</b>.</li>
+            <p>The <b>SP Indicator</b> illuminates. After three seconds, the <b>EB</b> and <b>MA Indicators</b> illuminate.</p>
+            <li>Set the <b>ES Selector</b> to <b>MA</b>.</li>
+            <li>Select the <b>FM Button</b>.</li>
+            <p>The <b>PF Indicator</b> illuminates, indicating successful firing.</p>
+          </ol>
+        </div>
+      </details>
     </aside>
 
     <main class="panel-stage">
       <section class="control-panel" aria-label="Phaser control panel">
         <div class="panel-canvas">
+          <!--Panel buttons-->
+          <div class="panel-actions">
+            <p id="panel-message" class="panel-message" aria-live="polite"></p>
+            <div class="action-buttons">
+              <button id="mark-success" class="action-button primary" type="button">Success</button>
+              <button id="reset-panel" class="action-button" type="button">Reset</button>
+              <button id="test-me" class="action-button" type="button">Test me</button>
+            </div>
+          </div>
           <!-- SP Indicator -->
           <div class="panel-item sp-indicator-group">
             <label class="panel-label" for="light-sp">SP Indicator</label>
