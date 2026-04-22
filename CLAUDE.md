@@ -14,6 +14,11 @@ This is a control panel desktop application.
 - **Cases simplified to three entries** — `normal`, `normal`, `maFailure` with no `guidance` field.
 - **Success button removed; auto-detect via pfLit** — When `state.machine.pfLit` becomes true, a success notification appears automatically. Dismissing it resets the machine. The explicit Success button is gone.
 - **Case 3 (maFailure) unique success message** — Dismissing the success notification on case 3 shows a placeholder message prompting metacognitive reflection (to be refined later).
+- **Case 3 introduces an "I need help" button** — Appears after the learner's first Reset attempt within Case 3 (maFailure). Tracked via `state.ui.resetCountInCase`.
+- **Case 3 has two exit paths** — Solving it (PF illuminates → dismiss success notification) or clicking "I need help." Both lead to the metacognitive reflection prompt.
+- **Reflection prompt framing differs by path** — Solved path: "you figured it out — here's why that worked." Help path: "this is the point — here's why you got stuck." Implemented as two content slots in a single overlay, one hidden at a time.
+- **Reflection "Continue" launches the mental model phase** — `handleContinueToMentalModel` resets to practice mode on case 1, sets `state.ui.mentalModelPhase = true`. The manual section then shows a placeholder div for the system/mental model diagram (content TBD).
+- **All learners go through the mental model phase** — No skipping. Both Case 3 exit paths funnel into the reflection, which is the only entry point to the mental model phase.
 
 ## Tech Stack
 - **Vanilla HTML/CSS/JS** — no framework, no build tools, no package manager

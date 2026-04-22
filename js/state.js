@@ -28,7 +28,9 @@ export const state = {
 
   ui: {
     panelMessage: "",
-    testMode: false
+    testMode: false,
+    helpRequested: false,
+    mentalModelPhase: false
   },
 
   debug: {

@@ -2,7 +2,6 @@ import { isSelectorEnabled, areFireButtonsEnabled } from "./machine.js";
 import { updateInstructionsUI } from "./instructions.js";
 
 const SUCCESS_MESSAGE_DEFAULT = "Phasers fired successfully.";
-const SUCCESS_MESSAGE_MA_FAILURE = "[Placeholder: metacognitive reflection prompt for MA failure case — to be refined.]";
 
 export function render(state, el, updateDebugPanel) {
   /* =========================
@@ -79,14 +78,27 @@ export function render(state, el, updateDebugPanel) {
   ========================= */
 
   if (el.successNotification) {
-    el.successNotification.hidden = !state.machine.pfLit;
+    el.successNotification.hidden = !state.machine.pfLit || state.app.caseIndex === 2;
 
-    if (state.machine.pfLit && el.successMessage) {
-      el.successMessage.textContent =
-        state.app.caseIndex === 2
-          ? SUCCESS_MESSAGE_MA_FAILURE
-          : SUCCESS_MESSAGE_DEFAULT;
+    if (state.machine.pfLit && state.app.caseIndex !== 2 && el.successMessage) {
+      el.successMessage.textContent = SUCCESS_MESSAGE_DEFAULT;
     }
+  }
+
+  /* =========================
+     Help button
+  ========================= */
+
+  if (el.helpButton) {
+    el.helpButton.hidden = !state.ui.testMode;
+  }
+
+  /* =========================
+     Mental model placeholder
+  ========================= */
+
+  if (el.mentalModelPlaceholder) {
+    el.mentalModelPlaceholder.hidden = !state.ui.mentalModelPhase;
   }
 
   /* =========================

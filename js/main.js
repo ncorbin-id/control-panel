@@ -1,6 +1,6 @@
 import { state } from "./state.js";
 import { getDomElements } from "./dom.js";
-import { applyCurrentCase } from "./cases.js";
+import { applyCurrentCase, setCase, nextCase } from "./cases.js";
 import {
   togglePower,
   cycleSelector,
@@ -77,6 +77,15 @@ function setStoredData(data) {
    BUTTON HANDLERS
 ========================= */
 
+function showReflection(path) {
+  el.reflectionGeneralHelp.hidden = path !== "general-help";
+  el.reflectionSolved.hidden = path !== "solved";
+  el.reflectionHelp.hidden = path !== "help";
+  el.reflectionContinue.hidden = path !== "general-help";
+  el.tryAgain.hidden = path === "general-help";
+  el.reflectionOverlay.hidden = false;
+}
+
 function handleSuccessDismiss() {
   const existing = getStoredData();
 
@@ -88,9 +97,17 @@ function handleSuccessDismiss() {
   };
 
   setStoredData(updated);
-
   clearPanelMessage();
-  resetToCurrentCase();
+
+  if (state.app.caseIndex === 2) {
+    showReflection("solved");
+  } else if (state.ui.testMode) {
+    state.ui.resetCountInCase = 0;
+    nextCase(state);
+    resetToCurrentCase();
+  } else {
+    resetToCurrentCase();
+  }
 }
 
 function handleReset() {
@@ -101,6 +118,24 @@ function handleReset() {
 function handleTestMe() {
   clearPanelMessage();
   state.ui.testMode = true;
+  resetToCurrentCase();
+}
+
+function handleReflectionContinue() {
+  el.reflectionOverlay.hidden = true;
+}
+
+function handleHelpRequested() {
+  clearPanelMessage();
+  state.ui.helpRequested = true;
+  showReflection(state.app.caseIndex === 2 ? "help" : "general-help");
+}
+
+function handleTryAgain() {
+  el.reflectionOverlay.hidden = true;
+  state.ui.helpRequested = false;
+  state.ui.testMode = false;
+  setCase(state, 0);
   resetToCurrentCase();
 }
 
@@ -120,16 +155,23 @@ el.esSelector.addEventListener("click", () => {
   rerender();
 });
 
+function handleFireResult() {
+  rerender();
+  if (state.machine.pfLit && state.app.caseIndex === 2) {
+    showReflection("solved");
+  }
+}
+
 el.fmButton.addEventListener("click", () => {
   clearPanelMessage();
   evaluateFire(state, "FM");
-  rerender();
+  handleFireResult();
 });
 
 el.fsButton.addEventListener("click", () => {
   clearPanelMessage();
   evaluateFire(state, "FS");
-  rerender();
+  handleFireResult();
 });
 
 /* =========================
@@ -139,11 +181,14 @@ el.fsButton.addEventListener("click", () => {
 el.successDismiss.addEventListener("click", handleSuccessDismiss);
 el.resetPanel.addEventListener("click", handleReset);
 el.testMe.addEventListener("click", handleTestMe);
+el.helpButton.addEventListener("click", handleHelpRequested);
+el.reflectionContinue.addEventListener("click", handleReflectionContinue);
+el.tryAgain.addEventListener("click", handleTryAgain);
 
 /* =========================
    INIT
 ========================= */
 
 applyCurrentCase(state);
-createDebugPanel(state, { rerender, resetToCurrentCase });
+createDebugPanel();
 rerender();

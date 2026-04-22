@@ -19,6 +19,16 @@ export function getDomElements() {
     successDismiss: document.getElementById("success-dismiss"),
 
     manualSection: document.querySelector(".instruction-section.manual"),
-    taskInstructions: document.querySelector(".instruction-section.task .instructions")
+    taskInstructions: document.querySelector(".instruction-section.task .instructions"),
+
+    helpButton: document.getElementById("help-button"),
+    mentalModelPlaceholder: document.getElementById("mental-model-placeholder"),
+
+    reflectionOverlay: document.getElementById("reflection-overlay"),
+    reflectionGeneralHelp: document.getElementById("reflection-general-help"),
+    reflectionSolved: document.getElementById("reflection-solved"),
+    reflectionHelp: document.getElementById("reflection-help"),
+    reflectionContinue: document.getElementById("reflection-continue"),
+    tryAgain: document.getElementById("try-again")
   };
 }
