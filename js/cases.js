@@ -1,7 +1,7 @@
 export const cases = [
-  { key: "case1", machineState: "normal" },
-  { key: "case2", machineState: "normal" },
-  { key: "case3", machineState: "maFailure" }
+  { key: "case1", machineState: "normal",    reflectionCase: false },
+  { key: "case2", machineState: "normal",    reflectionCase: false },
+  { key: "case3", machineState: "maFailure", reflectionCase: true  }
 ];
 
 export function getCurrentCase(state) {
@@ -19,7 +19,6 @@ export function setCase(state, index) {
   if (index < 0 || index >= cases.length) return;
 
   state.app.caseIndex = index;
-  state.debug.manualOverride = false;
   applyCurrentCase(state);
 }
 
@@ -27,7 +26,6 @@ export function nextCase(state) {
   if (state.app.caseIndex >= cases.length - 1) return false;
 
   state.app.caseIndex += 1;
-  state.debug.manualOverride = false;
   applyCurrentCase(state);
   return true;
 }

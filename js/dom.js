@@ -22,7 +22,6 @@ export function getDomElements() {
     taskInstructions: document.querySelector(".instruction-section.task .instructions"),
 
     helpButton: document.getElementById("help-button"),
-    mentalModelPlaceholder: document.getElementById("mental-model-placeholder"),
 
     reflectionOverlay: document.getElementById("reflection-overlay"),
     reflectionGeneralHelp: document.getElementById("reflection-general-help"),

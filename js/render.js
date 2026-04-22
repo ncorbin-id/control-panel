@@ -1,4 +1,5 @@
 import { isSelectorEnabled, areFireButtonsEnabled } from "./machine.js";
+import { getCurrentCase } from "./cases.js";
 import { updateInstructionsUI } from "./instructions.js";
 
 const SUCCESS_MESSAGE_DEFAULT = "Phasers fired successfully.";
@@ -77,10 +78,12 @@ export function render(state, el, updateDebugPanel) {
      Success notification
   ========================= */
 
-  if (el.successNotification) {
-    el.successNotification.hidden = !state.machine.pfLit || state.app.caseIndex === 2;
+  const isReflectionCase = getCurrentCase(state)?.reflectionCase ?? false;
 
-    if (state.machine.pfLit && state.app.caseIndex !== 2 && el.successMessage) {
+  if (el.successNotification) {
+    el.successNotification.hidden = !state.machine.pfLit || isReflectionCase;
+
+    if (state.machine.pfLit && !isReflectionCase && el.successMessage) {
       el.successMessage.textContent = SUCCESS_MESSAGE_DEFAULT;
     }
   }
@@ -91,14 +94,6 @@ export function render(state, el, updateDebugPanel) {
 
   if (el.helpButton) {
     el.helpButton.hidden = !state.ui.testMode;
-  }
-
-  /* =========================
-     Mental model placeholder
-  ========================= */
-
-  if (el.mentalModelPlaceholder) {
-    el.mentalModelPlaceholder.hidden = !state.ui.mentalModelPhase;
   }
 
   /* =========================

@@ -2,38 +2,26 @@ const mode = new URLSearchParams(window.location.search).get("mode") || "underst
 
 export const state = {
   app: {
-    mode, // "understand" | "memorize"
+    mode,
     caseIndex: 0
   },
 
   caseData: {
-    machineState: "normal" // "normal" | "maFailure"
+    machineState: "normal"
   },
 
   machine: {
     power: false,
-    selector: "N", // "MA" | "SA" | "N"
+    selector: "N",
     ebWarming: false,
     ebReady: false,
-    chargedSource: null, // null | "MA" | "SA"
+    chargedSource: null,
     pfLit: false,
     warmupTimer: null
   },
 
-  storage: {
-    successRecognized: false,
-    successCount: 0,
-    lastSuccessAt: null
-  },
-
   ui: {
     panelMessage: "",
-    testMode: false,
-    helpRequested: false,
-    mentalModelPhase: false
-  },
-
-  debug: {
-    manualOverride: false
+    testMode: false
   }
 };

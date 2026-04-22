@@ -1,6 +1,6 @@
 import { state } from "./state.js";
 import { getDomElements } from "./dom.js";
-import { applyCurrentCase, setCase, nextCase } from "./cases.js";
+import { applyCurrentCase, setCase, nextCase, getCurrentCase } from "./cases.js";
 import {
   togglePower,
   cycleSelector,
@@ -9,6 +9,7 @@ import {
 } from "./machine.js";
 import { render } from "./render.js";
 import { createDebugPanel, updateDebugPanel } from "./debug.js";
+import { initInstructions } from "./instructions.js";
 
 const STORAGE_KEY = "phaserTraining";
 
@@ -36,26 +37,6 @@ function resetToCurrentCase() {
 /* =========================
    PANEL MESSAGE HELPERS
 ========================= */
-
-let _panelMessageTimer = null;
-let _panelFadeTimer = null;
-
-function setPanelMessage(message) {
-  state.ui.panelMessage = message;
-  if (_panelMessageTimer) clearTimeout(_panelMessageTimer);
-  if (_panelFadeTimer) clearTimeout(_panelFadeTimer);
-  if (el.panelMessage) el.panelMessage.style.opacity = "1";
-  _panelFadeTimer = setTimeout(() => {
-    if (el.panelMessage) el.panelMessage.style.opacity = "0";
-  }, 3400);
-  _panelMessageTimer = setTimeout(() => {
-    state.ui.panelMessage = "";
-    if (el.panelMessage) el.panelMessage.style.opacity = "1";
-    rerender();
-    _panelMessageTimer = null;
-    _panelFadeTimer = null;
-  }, 4000);
-}
 
 function clearPanelMessage() {
   state.ui.panelMessage = "";
@@ -89,20 +70,18 @@ function showReflection(path) {
 function handleSuccessDismiss() {
   const existing = getStoredData();
 
-  const updated = {
+  setStoredData({
     ...existing,
     successRecognized: true,
     successCount: (existing.successCount || 0) + 1,
     lastSuccessAt: new Date().toISOString()
-  };
+  });
 
-  setStoredData(updated);
   clearPanelMessage();
 
-  if (state.app.caseIndex === 2) {
+  if (getCurrentCase(state).reflectionCase) {
     showReflection("solved");
   } else if (state.ui.testMode) {
-    state.ui.resetCountInCase = 0;
     nextCase(state);
     resetToCurrentCase();
   } else {
@@ -127,13 +106,11 @@ function handleReflectionContinue() {
 
 function handleHelpRequested() {
   clearPanelMessage();
-  state.ui.helpRequested = true;
-  showReflection(state.app.caseIndex === 2 ? "help" : "general-help");
+  showReflection(getCurrentCase(state).reflectionCase ? "help" : "general-help");
 }
 
 function handleTryAgain() {
   el.reflectionOverlay.hidden = true;
-  state.ui.helpRequested = false;
   state.ui.testMode = false;
   setCase(state, 0);
   resetToCurrentCase();
@@ -157,7 +134,7 @@ el.esSelector.addEventListener("click", () => {
 
 function handleFireResult() {
   rerender();
-  if (state.machine.pfLit && state.app.caseIndex === 2) {
+  if (state.machine.pfLit && getCurrentCase(state).reflectionCase) {
     showReflection("solved");
   }
 }
@@ -191,4 +168,5 @@ el.tryAgain.addEventListener("click", handleTryAgain);
 
 applyCurrentCase(state);
 createDebugPanel();
+initInstructions(el);
 rerender();
