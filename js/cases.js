@@ -1,7 +1,7 @@
 export const cases = [
-  { key: "case1", machineState: "normal", guidance: "enabled" },
-  { key: "case2", machineState: "normal", guidance: "locked" },
-  { key: "case3", machineState: "maFailure", guidance: "locked" }
+  { key: "case1", machineState: "normal" },
+  { key: "case2", machineState: "normal" },
+  { key: "case3", machineState: "maFailure" }
 ];
 
 export function getCurrentCase(state) {
@@ -13,7 +13,6 @@ export function applyCurrentCase(state) {
   if (!currentCase) return;
 
   state.caseData.machineState = currentCase.machineState;
-  state.caseData.guidance = currentCase.guidance;
 }
 
 export function setCase(state, index) {

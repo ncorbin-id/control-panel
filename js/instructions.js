@@ -1,25 +1,21 @@
 export function updateInstructionsUI(state, el) {
   document.body.dataset.mode = state.app.mode;
-  document.body.dataset.guidance = state.caseData.guidance;
+  document.body.dataset.guidance = state.ui.testMode ? "locked" : "enabled";
   document.body.dataset.machineState = state.caseData.machineState;
   document.body.dataset.case = String(state.app.caseIndex + 1);
 
   if (el.instructionsPanel) {
-    const locked = state.caseData.guidance === "locked";
-
-    el.instructionsPanel.classList.toggle("guidance-locked", locked);
-    el.instructionsPanel.setAttribute("aria-hidden", locked ? "true" : "false");
+    el.instructionsPanel.classList.toggle("guidance-locked", state.ui.testMode);
+    el.instructionsPanel.setAttribute("aria-hidden", state.ui.testMode ? "true" : "false");
   }
 
   if (el.instructionsToggle) {
-    const locked = state.caseData.guidance === "locked";
-
-    el.instructionsToggle.disabled = locked;
-    el.instructionsToggle.setAttribute("aria-disabled", locked ? "true" : "false");
+    el.instructionsToggle.disabled = state.ui.testMode;
+    el.instructionsToggle.setAttribute("aria-disabled", state.ui.testMode ? "true" : "false");
   }
 
   if (el.instructionsLockMessage) {
-    el.instructionsLockMessage.hidden = state.caseData.guidance !== "locked";
+    el.instructionsLockMessage.hidden = !state.ui.testMode;
   }
 
   if (state.ui.testMode) {
@@ -32,7 +28,7 @@ export function updateInstructionsUI(state, el) {
 
     if (el.taskInstructions) {
       el.taskInstructions.innerHTML =
-        "<p>Fire phasers using the skill you've just practiced. Select <b>Success</b> to mark the procedure successful and reset the control panel for the next test. If you get stuck, select <b>Reset</b> to reset the control panel back to its original state.</p>";
+        "<p>Fire phasers using the skill you've just practiced. When the PF Indicator illuminates, a success notification will appear — dismiss it to reset the control panel for the next test. If you get stuck, select <b>Reset</b> to reset the control panel back to its original state.</p>";
     }
 
     if (el.testMe) {

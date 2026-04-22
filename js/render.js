@@ -1,6 +1,9 @@
 import { isSelectorEnabled, areFireButtonsEnabled } from "./machine.js";
 import { updateInstructionsUI } from "./instructions.js";
 
+const SUCCESS_MESSAGE_DEFAULT = "Phasers fired successfully.";
+const SUCCESS_MESSAGE_MA_FAILURE = "[Placeholder: metacognitive reflection prompt for MA failure case — to be refined.]";
+
 export function render(state, el, updateDebugPanel) {
   /* =========================
      Indicators
@@ -50,9 +53,11 @@ export function render(state, el, updateDebugPanel) {
      Enable / disable controls
   ========================= */
 
-  const selectorEnabled = isSelectorEnabled(state);
-  const fireEnabled = areFireButtonsEnabled(state);
+  const locked = state.machine.pfLit;
+  const selectorEnabled = !locked && isSelectorEnabled(state);
+  const fireEnabled = !locked && areFireButtonsEnabled(state);
 
+  el.spSwitch.disabled = locked;
   el.esSelector.disabled = !selectorEnabled;
   el.esSelector.setAttribute("aria-disabled", selectorEnabled ? "false" : "true");
 
@@ -67,6 +72,21 @@ export function render(state, el, updateDebugPanel) {
 
   if (el.panelMessage) {
     el.panelMessage.innerHTML = state.ui.panelMessage || "";
+  }
+
+  /* =========================
+     Success notification
+  ========================= */
+
+  if (el.successNotification) {
+    el.successNotification.hidden = !state.machine.pfLit;
+
+    if (state.machine.pfLit && el.successMessage) {
+      el.successMessage.textContent =
+        state.app.caseIndex === 2
+          ? SUCCESS_MESSAGE_MA_FAILURE
+          : SUCCESS_MESSAGE_DEFAULT;
+    }
   }
 
   /* =========================

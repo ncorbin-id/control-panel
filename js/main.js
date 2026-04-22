@@ -77,15 +77,7 @@ function setStoredData(data) {
    BUTTON HANDLERS
 ========================= */
 
-function handleSuccess() {
-  if (!state.machine.pfLit) {
-    setPanelMessage(
-      "The PF Indicator is not illuminated. Success cannot be registered. Try again or select <b>Reset</b>."
-    );
-    rerender();
-    return;
-  }
-
+function handleSuccessDismiss() {
   const existing = getStoredData();
 
   const updated = {
@@ -144,7 +136,7 @@ el.fsButton.addEventListener("click", () => {
    PANEL ACTION BUTTONS
 ========================= */
 
-el.markSuccess.addEventListener("click", handleSuccess);
+el.successDismiss.addEventListener("click", handleSuccessDismiss);
 el.resetPanel.addEventListener("click", handleReset);
 el.testMe.addEventListener("click", handleTestMe);
 
@@ -153,5 +145,5 @@ el.testMe.addEventListener("click", handleTestMe);
 ========================= */
 
 applyCurrentCase(state);
-createDebugPanel();
+createDebugPanel(state, { rerender, resetToCurrentCase });
 rerender();

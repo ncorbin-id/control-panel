@@ -1,9 +1,8 @@
-import { cases, setCase, nextCase, applyCurrentCase } from "./cases.js";
-import { resetMachine } from "./machine.js";
+import { cases, setCase, nextCase } from "./cases.js";
 
 let debugEls = null;
 
-export function createDebugPanel() {
+export function createDebugPanel(state, { rerender, resetToCurrentCase }) {
   console.log("Creating debug panel...");
   const panel = document.createElement("details");
   panel.id = "debug-panel";
@@ -27,9 +26,9 @@ export function createDebugPanel() {
       <label style="display:block; margin-bottom:4px;">
         Sequence step
         <select id="debug-sequence" style="display:block; width:100%; margin-top:2px;">
-          <option value="0">1 - normal + guidance enabled</option>
-          <option value="1">2 - normal + guidance locked</option>
-          <option value="2">3 - MA failure + guidance locked</option>
+          <option value="0">1 - normal</option>
+          <option value="1">2 - normal</option>
+          <option value="2">3 - MA failure</option>
         </select>
       </label>
 
@@ -44,8 +43,8 @@ export function createDebugPanel() {
       <label style="display:block; margin-bottom:8px;">
         Guidance
         <select id="debug-guidance" style="display:block; width:100%; margin-top:2px;">
-          <option value="enabled">enabled</option>
-          <option value="locked">locked</option>
+          <option value="enabled">enabled (practice)</option>
+          <option value="locked">locked (test me)</option>
         </select>
       </label>
 
@@ -72,40 +71,38 @@ export function createDebugPanel() {
 
   debugEls.sequence.addEventListener("change", (e) => {
     const index = Number(e.target.value);
-    state.sequenceIndex = index;
-    state.debugManualOverride = false;
-    applySequenceStep();
-    fullResetToCurrentScenario();
+    setCase(state, index);
+    resetToCurrentCase();
   });
 
   debugEls.machine.addEventListener("change", (e) => {
-    state.machineState = e.target.value;
-    state.debugManualOverride = true;
-    render();
+    state.caseData.machineState = e.target.value;
+    state.debug.manualOverride = true;
+    rerender();
   });
 
   debugEls.guidance.addEventListener("change", (e) => {
-    state.guidance = e.target.value;
-    state.debugManualOverride = true;
-    updateGuidanceUI();
-    render();
+    state.ui.testMode = e.target.value === "locked";
+    state.debug.manualOverride = true;
+    rerender();
   });
 
   debugEls.reset.addEventListener("click", () => {
-    fullResetToCurrentScenario();
+    resetToCurrentCase();
   });
 
   debugEls.next.addEventListener("click", () => {
-    nextSequenceStep();
+    nextCase(state);
+    resetToCurrentCase();
   });
 }
 
 export function updateDebugPanel(state) {
   if (!debugEls) return;
 
-  debugEls.caseSelect.value = String(state.app.caseIndex);
+  debugEls.sequence.value = String(state.app.caseIndex);
   debugEls.machine.value = state.caseData.machineState;
-  debugEls.guidance.value = state.caseData.guidance;
+  debugEls.guidance.value = state.ui.testMode ? "locked" : "enabled";
 
   debugEls.status.textContent =
     `mode: ${state.app.mode} | source: ${state.machine.chargedSource || "none"} | power: ${state.machine.power ? "on" : "off"}`;

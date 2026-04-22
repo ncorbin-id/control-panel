@@ -10,10 +10,13 @@ export function getDomElements() {
     fsButton: document.getElementById("fire-secondary"),
     esSelector: document.getElementById("es-selector"),
 
-    markSuccess: document.getElementById("mark-success"),
     resetPanel: document.getElementById("reset-panel"),
     testMe: document.getElementById("test-me"),
     panelMessage: document.getElementById("panel-message"),
+
+    successNotification: document.getElementById("success-notification"),
+    successMessage: document.getElementById("success-message"),
+    successDismiss: document.getElementById("success-dismiss"),
 
     manualSection: document.querySelector(".instruction-section.manual"),
     taskInstructions: document.querySelector(".instruction-section.task .instructions")

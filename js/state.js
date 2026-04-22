@@ -7,8 +7,7 @@ export const state = {
   },
 
   caseData: {
-    machineState: "normal", // "normal" | "maFailure"
-    guidance: "enabled" // "enabled" | "locked"
+    machineState: "normal" // "normal" | "maFailure"
   },
 
   machine: {
