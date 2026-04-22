@@ -1,4 +1,4 @@
-# Project Context
+# Project Context on Mac
 
 ## Project
 This is a control panel desktop application.
