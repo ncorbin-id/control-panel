@@ -108,9 +108,8 @@ function handleReset() {
 
 function handleTestMe() {
   clearPanelMessage();
-  // Placeholder for future logic
-  setPanelMessage("Test me is not active yet.");
-  rerender();
+  state.ui.testMode = true;
+  resetToCurrentCase();
 }
 
 /* =========================

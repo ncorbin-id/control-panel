@@ -28,7 +28,8 @@ export const state = {
   },
 
   ui: {
-    panelMessage: ""
+    panelMessage: "",
+    testMode: false
   },
 
   debug: {

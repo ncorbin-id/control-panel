@@ -21,4 +21,22 @@ export function updateInstructionsUI(state, el) {
   if (el.instructionsLockMessage) {
     el.instructionsLockMessage.hidden = state.caseData.guidance !== "locked";
   }
+
+  if (state.ui.testMode) {
+    if (el.manualSection) {
+      el.manualSection.removeAttribute("open");
+      el.manualSection.classList.add("test-mode-locked");
+      const summary = el.manualSection.querySelector("summary");
+      if (summary) summary.setAttribute("tabindex", "-1");
+    }
+
+    if (el.taskInstructions) {
+      el.taskInstructions.innerHTML =
+        "<p>Fire phasers using the skill you've just practiced. Select <b>Success</b> to mark the procedure successful and reset the control panel for the next test. If you get stuck, select <b>Reset</b> to reset the control panel back to its original state.</p>";
+    }
+
+    if (el.testMe) {
+      el.testMe.hidden = true;
+    }
+  }
 }

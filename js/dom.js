@@ -13,6 +13,9 @@ export function getDomElements() {
     markSuccess: document.getElementById("mark-success"),
     resetPanel: document.getElementById("reset-panel"),
     testMe: document.getElementById("test-me"),
-    panelMessage: document.getElementById("panel-message")
+    panelMessage: document.getElementById("panel-message"),
+
+    manualSection: document.querySelector(".instruction-section.manual"),
+    taskInstructions: document.querySelector(".instruction-section.task .instructions")
   };
 }

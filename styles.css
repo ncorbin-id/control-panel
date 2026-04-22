@@ -161,6 +161,16 @@ body {
 }
 
 /* =========================
+   Test mode
+========================= */
+
+.instruction-section.manual.test-mode-locked > summary {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.5;
+}
+
+/* =========================
    Panel stage
 ========================= */
 
