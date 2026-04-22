@@ -1,5 +1,8 @@
 import { isSelectorEnabled, areFireButtonsEnabled } from "./machine.js";
+import { getCurrentCase } from "./cases.js";
 import { updateInstructionsUI } from "./instructions.js";
+
+const SUCCESS_MESSAGE_DEFAULT = "Phasers fired successfully.";
 
 export function render(state, el, updateDebugPanel) {
   /* =========================
@@ -50,9 +53,11 @@ export function render(state, el, updateDebugPanel) {
      Enable / disable controls
   ========================= */
 
-  const selectorEnabled = isSelectorEnabled(state);
-  const fireEnabled = areFireButtonsEnabled(state);
+  const locked = state.machine.pfLit;
+  const selectorEnabled = !locked && isSelectorEnabled(state);
+  const fireEnabled = !locked && areFireButtonsEnabled(state);
 
+  el.spSwitch.disabled = locked;
   el.esSelector.disabled = !selectorEnabled;
   el.esSelector.setAttribute("aria-disabled", selectorEnabled ? "false" : "true");
 
@@ -67,6 +72,28 @@ export function render(state, el, updateDebugPanel) {
 
   if (el.panelMessage) {
     el.panelMessage.innerHTML = state.ui.panelMessage || "";
+  }
+
+  /* =========================
+     Success notification
+  ========================= */
+
+  const isReflectionCase = getCurrentCase(state)?.reflectionCase ?? false;
+
+  if (el.successNotification) {
+    el.successNotification.hidden = !state.machine.pfLit || isReflectionCase;
+
+    if (state.machine.pfLit && !isReflectionCase && el.successMessage) {
+      el.successMessage.textContent = SUCCESS_MESSAGE_DEFAULT;
+    }
+  }
+
+  /* =========================
+     Help button
+  ========================= */
+
+  if (el.helpButton) {
+    el.helpButton.hidden = !state.ui.testMode;
   }
 
   /* =========================

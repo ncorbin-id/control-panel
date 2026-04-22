@@ -1,6 +1,6 @@
 import { state } from "./state.js";
 import { getDomElements } from "./dom.js";
-import { applyCurrentCase } from "./cases.js";
+import { applyCurrentCase, setCase, nextCase, getCurrentCase } from "./cases.js";
 import {
   togglePower,
   cycleSelector,
@@ -9,6 +9,7 @@ import {
 } from "./machine.js";
 import { render } from "./render.js";
 import { createDebugPanel, updateDebugPanel } from "./debug.js";
+import { initInstructions } from "./instructions.js";
 
 const STORAGE_KEY = "phaserTraining";
 
@@ -37,26 +38,6 @@ function resetToCurrentCase() {
    PANEL MESSAGE HELPERS
 ========================= */
 
-let _panelMessageTimer = null;
-let _panelFadeTimer = null;
-
-function setPanelMessage(message) {
-  state.ui.panelMessage = message;
-  if (_panelMessageTimer) clearTimeout(_panelMessageTimer);
-  if (_panelFadeTimer) clearTimeout(_panelFadeTimer);
-  if (el.panelMessage) el.panelMessage.style.opacity = "1";
-  _panelFadeTimer = setTimeout(() => {
-    if (el.panelMessage) el.panelMessage.style.opacity = "0";
-  }, 3400);
-  _panelMessageTimer = setTimeout(() => {
-    state.ui.panelMessage = "";
-    if (el.panelMessage) el.panelMessage.style.opacity = "1";
-    rerender();
-    _panelMessageTimer = null;
-    _panelFadeTimer = null;
-  }, 4000);
-}
-
 function clearPanelMessage() {
   state.ui.panelMessage = "";
 }
@@ -77,28 +58,35 @@ function setStoredData(data) {
    BUTTON HANDLERS
 ========================= */
 
-function handleSuccess() {
-  if (!state.machine.pfLit) {
-    setPanelMessage(
-      "The PF Indicator is not illuminated. Success cannot be registered. Try again or select <b>Reset</b>."
-    );
-    rerender();
-    return;
-  }
+function showReflection(path) {
+  el.reflectionGeneralHelp.hidden = path !== "general-help";
+  el.reflectionSolved.hidden = path !== "solved";
+  el.reflectionHelp.hidden = path !== "help";
+  el.reflectionContinue.hidden = path !== "general-help";
+  el.tryAgain.hidden = path === "general-help";
+  el.reflectionOverlay.hidden = false;
+}
 
+function handleSuccessDismiss() {
   const existing = getStoredData();
 
-  const updated = {
+  setStoredData({
     ...existing,
     successRecognized: true,
     successCount: (existing.successCount || 0) + 1,
     lastSuccessAt: new Date().toISOString()
-  };
-
-  setStoredData(updated);
+  });
 
   clearPanelMessage();
-  resetToCurrentCase();
+
+  if (getCurrentCase(state).reflectionCase) {
+    showReflection("solved");
+  } else if (state.ui.testMode) {
+    nextCase(state);
+    resetToCurrentCase();
+  } else {
+    resetToCurrentCase();
+  }
 }
 
 function handleReset() {
@@ -108,9 +96,24 @@ function handleReset() {
 
 function handleTestMe() {
   clearPanelMessage();
-  // Placeholder for future logic
-  setPanelMessage("Test me is not active yet.");
-  rerender();
+  state.ui.testMode = true;
+  resetToCurrentCase();
+}
+
+function handleReflectionContinue() {
+  el.reflectionOverlay.hidden = true;
+}
+
+function handleHelpRequested() {
+  clearPanelMessage();
+  showReflection(getCurrentCase(state).reflectionCase ? "help" : "general-help");
+}
+
+function handleTryAgain() {
+  el.reflectionOverlay.hidden = true;
+  state.ui.testMode = false;
+  setCase(state, 0);
+  resetToCurrentCase();
 }
 
 /* =========================
@@ -129,25 +132,35 @@ el.esSelector.addEventListener("click", () => {
   rerender();
 });
 
+function handleFireResult() {
+  rerender();
+  if (state.machine.pfLit && getCurrentCase(state).reflectionCase) {
+    showReflection("solved");
+  }
+}
+
 el.fmButton.addEventListener("click", () => {
   clearPanelMessage();
   evaluateFire(state, "FM");
-  rerender();
+  handleFireResult();
 });
 
 el.fsButton.addEventListener("click", () => {
   clearPanelMessage();
   evaluateFire(state, "FS");
-  rerender();
+  handleFireResult();
 });
 
 /* =========================
    PANEL ACTION BUTTONS
 ========================= */
 
-el.markSuccess.addEventListener("click", handleSuccess);
+el.successDismiss.addEventListener("click", handleSuccessDismiss);
 el.resetPanel.addEventListener("click", handleReset);
 el.testMe.addEventListener("click", handleTestMe);
+el.helpButton.addEventListener("click", handleHelpRequested);
+el.reflectionContinue.addEventListener("click", handleReflectionContinue);
+el.tryAgain.addEventListener("click", handleTryAgain);
 
 /* =========================
    INIT
@@ -155,4 +168,5 @@ el.testMe.addEventListener("click", handleTestMe);
 
 applyCurrentCase(state);
 createDebugPanel();
+initInstructions(el);
 rerender();

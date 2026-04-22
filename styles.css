@@ -161,6 +161,16 @@ body {
 }
 
 /* =========================
+   Test mode
+========================= */
+
+.instruction-section.manual.test-mode-locked > summary {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.5;
+}
+
+/* =========================
    Panel stage
 ========================= */
 
@@ -608,6 +618,53 @@ body {
     left: 90%;
     top: 70%;
   }
+}
+
+/* =========================
+   Reflection overlay
+========================= */
+
+.reflection-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 100;
+}
+
+.reflection-overlay:not([hidden]) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reflection-card {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  max-width: 480px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+}
+
+.reflection-heading {
+  margin: 0 0 0.4rem;
+  font-size: 1.2rem;
+}
+
+.reflection-body {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #444;
+}
+
+.reflection-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 /* =========================
