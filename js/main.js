@@ -37,8 +37,24 @@ function resetToCurrentCase() {
    PANEL MESSAGE HELPERS
 ========================= */
 
+let _panelMessageTimer = null;
+let _panelFadeTimer = null;
+
 function setPanelMessage(message) {
   state.ui.panelMessage = message;
+  if (_panelMessageTimer) clearTimeout(_panelMessageTimer);
+  if (_panelFadeTimer) clearTimeout(_panelFadeTimer);
+  if (el.panelMessage) el.panelMessage.style.opacity = "1";
+  _panelFadeTimer = setTimeout(() => {
+    if (el.panelMessage) el.panelMessage.style.opacity = "0";
+  }, 3400);
+  _panelMessageTimer = setTimeout(() => {
+    state.ui.panelMessage = "";
+    if (el.panelMessage) el.panelMessage.style.opacity = "1";
+    rerender();
+    _panelMessageTimer = null;
+    _panelFadeTimer = null;
+  }, 4000);
 }
 
 function clearPanelMessage() {
