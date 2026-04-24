@@ -134,15 +134,24 @@
     <div class="reflection-card">
       <div id="reflection-general-help" hidden>
         <h2 class="reflection-heading">Need a hint?</h2>
-        <p class="reflection-body">[Placeholder: general hint content for cases 1 and 2.]</p>
-      </div>
+        <p class="reflection-body">Remember the procedure:</p>
+          <ol>
+            <li>Flip the <strong>SP Switch</strong>.</li>
+            <li>Set the <strong>ES Selector</strong> to <strong>MA</strong>.</li>
+            <li>Select the <strong>FM</strong> button.</li>
+          </ol>      
+        </div>
       <div id="reflection-solved" hidden>
-        <h2 class="reflection-heading">You solved it.</h2>
-        <p class="reflection-body">[Placeholder: explain what the MA failure scenario reveals about how the system works, and why the steps the learner took succeeded.]</p>
+        <h2 class="reflection-heading">You got it, but how?</h2>
+        <p class="reflection-body">You experienced a system malfunction. The MA Indicator didn't illuminate, but you found a way to fire phasers. But do you understand why that worked, or was it a lucky guess?</p>
+        <p class="reflection-body">When we learn new systems by memorizing procedures, we risk limiting our ability to think creatively and strategically about what to do when things go off track.</p>
+        <p class="reflection-body">Next, you'll try learning this system again using a different approach.</p>
       </div>
       <div id="reflection-help" hidden>
-        <h2 class="reflection-heading">Getting stuck here is the point.</h2>
-        <p class="reflection-body">[Placeholder: explain what the MA failure scenario was designed to reveal and why it reliably trips people up.]</p>
+        <h2 class="reflection-heading">Something's up.</h2>
+        <p class="reflection-body">It seems like you've encountered a system malfunction. Something on the control panel isn't operating as expected. But do you know why?</p>
+        <p class="reflection-body">When we learn new systems by memorizing procedures, we risk limiting our ability to think creatively and strategically about what to do when things go off track.</p>
+        <p class="reflection-body">Next, you'll try learning this system again using a different approach.</p>
       </div>
       <div class="reflection-actions">
         <button id="reflection-continue" class="action-button primary" type="button" hidden>Continue</button>
@@ -152,7 +161,8 @@
   </div>
 
   <template id="task-instructions-test">
-    <p>Fire phasers using the skill you've just practiced. When the PF Indicator illuminates, a success notification will appear — dismiss it to reset the control panel for the next test. If you get stuck, select <b>Reset</b> to reset the control panel back to its original state.</p>
+    <p>Fire phasers in the following three test cases without access to the instruction manual.</p>
+    <p>If you get stuck, select <b>Reset</b> to reset the control panel back to its original state, or select <b>I need help</b> for a hint.</p>
   </template>
 
   <script type="module" src="js/main.js"></script>
