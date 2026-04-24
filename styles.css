@@ -6,7 +6,8 @@
   --blue-dark: #084e9d;
   --gray-button: #d7d7d7;
   --gray-border: #8f8f8f;
-  --instruction-width: clamp(260px, 28vw, 390px);
+  --rail-w: 52px;
+  --panel-w: clamp(260px, 28vw, 380px);
 }
 
 * {
@@ -23,10 +24,62 @@ body {
 .app {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: var(--instruction-width) minmax(0, 1fr);
-  gap: 16px;
-  padding: 16px;
+  grid-template-columns: var(--rail-w) var(--panel-w) 1fr;
   align-items: start;
+  transition: grid-template-columns 0.35s ease;
+}
+
+
+/* =========================
+   Icon rail
+========================= */
+
+.icon-rail {
+  width: var(--rail-w);
+  background: #1e1e1e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+  gap: 2px;
+  min-height: 100vh;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.rail-btn {
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.rail-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.rail-btn.is-active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+@keyframes railPulse {
+  0%, 100% { background: rgba(255, 255, 255, 0.14); }
+  50% { background: rgba(255, 255, 255, 0.35); box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.12); }
+}
+
+.rail-btn.pulse {
+  animation: railPulse 0.5s ease-out 3;
 }
 
 /* =========================
@@ -34,10 +87,42 @@ body {
 ========================= */
 
 .instruction-panel {
+  background: #fff;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  min-height: 320px;
+  min-height: 100vh;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.panel-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 13px 16px;
+  background: rgba(13, 99, 199, 0.07);
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--blue);
+  transition: background 0.15s ease;
+  flex-shrink: 0;
+}
+
+.panel-nav-item:hover {
+  background: rgba(13, 99, 199, 0.13);
+}
+
+.panel-nav-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
 }
 
 .instruction-section {
@@ -50,6 +135,15 @@ body {
 .instruction-section.task {
   background: rgba(13, 99, 199, 0.08);
   border: 1px solid rgba(13, 99, 199, 0.25);
+}
+
+/* Flatten card styles when sections live inside the sidebar */
+.aside-section {
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.09);
 }
 
 .instruction-section summary {
@@ -176,6 +270,7 @@ body {
 
 .panel-stage {
   width: 100%;
+  padding: 16px;
 }
 
 .control-panel {
@@ -589,8 +684,8 @@ body {
 ========================= */
 
 @media (max-width: 1024px) {
-  .app {
-    grid-template-columns: 1fr;
+  :root {
+    --panel-w: 220px;
   }
 
   .instruction-panel {
@@ -618,6 +713,82 @@ body {
     left: 90%;
     top: 70%;
   }
+}
+
+/* =========================
+   Instructions modal
+========================= */
+
+.instructions-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.instructions-overlay.is-closed {
+  display: none;
+}
+
+.instructions-overlay.fly-away {
+  background: transparent;
+  pointer-events: none;
+  transition: background 0.4s ease;
+}
+
+.instructions-overlay.fly-away .instructions-card {
+  animation: flyToCorner 0.65s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+@keyframes flyToCorner {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(calc(-50vw + 26px), calc(-50vh + 30px)) scale(0.05); opacity: 0; }
+}
+
+.instructions-card {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  padding: 32px 32px 24px;
+  max-width: 560px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+}
+
+.instructions-heading {
+  margin: 0 0 16px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.instructions-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.instructions-close:hover {
+  background: rgba(0, 0, 0, 0.07);
+  color: rgba(0, 0, 0, 0.8);
 }
 
 /* =========================
@@ -672,13 +843,17 @@ body {
 ========================= */
 
 @media (max-width: 680px) {
-  body {
-    background: var(--panel-bg);
+  .app {
+    grid-template-columns: 1fr;
   }
 
-  .app {
-    padding: 10px;
-    gap: 10px;
+  .icon-rail,
+  .instruction-panel {
+    display: none;
+  }
+
+  body {
+    background: var(--panel-bg);
   }
 
   .instruction-section {

@@ -35,7 +35,6 @@ export function updateInstructionsUI(state, el) {
     }
   } else {
     if (el.manualSection) {
-      el.manualSection.setAttribute("open", "");
       el.manualSection.classList.remove("test-mode-locked");
       const summary = el.manualSection.querySelector("summary");
       if (summary) summary.removeAttribute("tabindex");

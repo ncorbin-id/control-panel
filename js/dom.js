@@ -1,5 +1,7 @@
 export function getDomElements() {
   return {
+    appContainer: document.querySelector(".app"),
+
     spIndicator: document.getElementById("light-sp"),
     ebIndicator: document.getElementById("light-eb"),
     maIndicator: document.getElementById("light-ma"),
@@ -22,6 +24,13 @@ export function getDomElements() {
     taskInstructions: document.querySelector(".instruction-section.task .instructions"),
 
     helpButton: document.getElementById("help-button"),
+
+    panelToggle: document.getElementById("panel-toggle"),
+    instructionsRailBtn: document.getElementById("instructions-rail-btn"),
+    instructionsAccordion: document.getElementById("instructions-accordion"),
+
+    instructionsOverlay: document.getElementById("instructions-overlay"),
+    instructionsClose: document.getElementById("instructions-close"),
 
     reflectionOverlay: document.getElementById("reflection-overlay"),
     reflectionGeneralHelp: document.getElementById("reflection-general-help"),

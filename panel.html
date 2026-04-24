@@ -8,21 +8,45 @@
 </head>
 <body>
   <div class="app">
+
+    <!-- Icon rail -->
+    <nav class="icon-rail">
+      <button id="instructions-rail-btn" class="rail-btn" type="button"
+        aria-label="Your instructions" aria-pressed="false" title="Your instructions">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="16" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+      </button>
+      <button id="panel-toggle" class="rail-btn is-active" type="button"
+        aria-label="Control Panel Instruction Manual" aria-pressed="true" title="Control Panel Instruction Manual">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+        </svg>
+      </button>
+    </nav>
+
+    <!-- Instruction panel / drawer -->
     <aside class="instruction-panel">
-      <details class="instruction-section task" open>
+      <!-- Your instructions accordion (closed by default; opened by fly-away animation) -->
+      <details id="instructions-accordion" class="instruction-section task aside-section">
         <summary>Your instructions</summary>
         <div class="instructions">
-            <p>Your task is to fire phasers aboard a starship. First, you'll practice the procedure using the excerpt from the <i>Control Panel Instruction Manual</i>. When you're ready, you'll test your ability to fire phasers without guidance from the manual.</p>
-            <ol>
-              <li>Read through the <i>Control Panel Instruction Manual</i> and familiarize yourself with the control panel.</li>
-              <li>Practice firing phasers a few times on your own.
-                <p>If you get stuck, select <b>Reset</b> to reset the control panel back to its original state.</p>
-              </li>
-              <li>When you're ready, select <b>Test me</b> to test your ability to fire phasers on your own without guidance.</li>
-            </ol>
+          <p>Your task is to fire phasers aboard a starship. First, you'll practice the procedure using the excerpt from the <i>Control Panel Instruction Manual</i>. When you're ready, you'll test your ability to fire phasers without guidance from the manual.</p>
+          <ol>
+            <li>Read through the <i>Control Panel Instruction Manual</i> and familiarize yourself with the control panel.</li>
+            <li>Practice firing phasers a few times on your own.
+              <p>If you get stuck, select <b>Reset</b> to reset the control panel back to its original state.</p>
+            </li>
+            <li>When you're ready, select <b>Test me</b> to test your ability to fire phasers on your own without guidance.</li>
+          </ol>
         </div>
       </details>
-      <details class="instruction-section manual" open>
+
+      <!-- Control Panel Instruction Manual accordion (open by default) -->
+      <details class="instruction-section manual aside-section" open>
         <summary>Control Panel Instruction Manual</summary>
         <div class="instructions">
           <h2>Phasers</h2>
@@ -42,6 +66,7 @@
       </details>
     </aside>
 
+    <!-- Main control panel -->
     <main class="panel-stage">
       <section class="control-panel" aria-label="Phaser control panel">
         <div class="panel-canvas">
@@ -128,6 +153,25 @@
         </div>
       </section>
     </main>
+
+  </div>
+
+  <!-- Your instructions: initial modal (auto-dismisses and flies to sidebar on page load) -->
+  <div id="instructions-overlay" class="instructions-overlay">
+    <div class="instructions-card">
+      <button id="instructions-close" class="instructions-close" type="button" aria-label="Close instructions">&#x2715;</button>
+      <h2 class="instructions-heading">Your instructions</h2>
+      <div class="instructions">
+        <p>Your task is to fire phasers aboard a starship. First, you'll practice the procedure using the excerpt from the <i>Control Panel Instruction Manual</i>. When you're ready, you'll test your ability to fire phasers without guidance from the manual.</p>
+        <ol>
+          <li>Read through the <i>Control Panel Instruction Manual</i> and familiarize yourself with the control panel.</li>
+          <li>Practice firing phasers a few times on your own.
+            <p>If you get stuck, select <b>Reset</b> to reset the control panel back to its original state.</p>
+          </li>
+          <li>When you're ready, select <b>Test me</b> to test your ability to fire phasers on your own without guidance.</li>
+        </ol>
+      </div>
+    </div>
   </div>
 
   <div id="reflection-overlay" class="reflection-overlay" hidden>
@@ -139,7 +183,7 @@
             <li>Flip the <strong>SP Switch</strong>.</li>
             <li>Set the <strong>ES Selector</strong> to <strong>MA</strong>.</li>
             <li>Select the <strong>FM</strong> button.</li>
-          </ol>      
+          </ol>
         </div>
       <div id="reflection-solved" hidden>
         <h2 class="reflection-heading">You got it, but how?</h2>

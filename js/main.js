@@ -104,6 +104,10 @@ function handleReflectionContinue() {
   el.reflectionOverlay.hidden = true;
 }
 
+function handlePanelToggle() {
+  el.manualSection.open = !el.manualSection.open;
+}
+
 function handleHelpRequested() {
   clearPanelMessage();
   showReflection(getCurrentCase(state).reflectionCase ? "help" : "general-help");
@@ -113,7 +117,42 @@ function handleTryAgain() {
   el.reflectionOverlay.hidden = true;
   state.ui.testMode = false;
   setCase(state, 0);
+  el.manualSection.setAttribute("open", "");
   resetToCurrentCase();
+}
+
+/* =========================
+   INITIAL INSTRUCTIONS ANIMATION
+========================= */
+
+function initInstructionsAnimation() {
+  const card = el.instructionsOverlay.querySelector(".instructions-card");
+  let dismissed = false;
+
+  function onDismissed() {
+    if (dismissed) return;
+    dismissed = true;
+    el.instructionsOverlay.classList.add("is-closed");
+    el.instructionsOverlay.classList.remove("fly-away");
+    el.instructionsAccordion.open = true;
+    el.instructionsRailBtn.classList.add("pulse");
+    setTimeout(() => el.instructionsRailBtn.classList.remove("pulse"), 1500);
+  }
+
+  function dismiss() {
+    el.instructionsOverlay.classList.add("fly-away");
+    if (card) {
+      card.addEventListener("animationend", onDismissed, { once: true });
+    }
+    setTimeout(onDismissed, 800);
+  }
+
+  const autoTimer = setTimeout(dismiss, 3000);
+
+  el.instructionsClose.addEventListener("click", () => {
+    clearTimeout(autoTimer);
+    dismiss();
+  });
 }
 
 /* =========================
@@ -162,6 +201,21 @@ el.helpButton.addEventListener("click", handleHelpRequested);
 el.reflectionContinue.addEventListener("click", handleReflectionContinue);
 el.tryAgain.addEventListener("click", handleTryAgain);
 
+el.panelToggle.addEventListener("click", handlePanelToggle);
+el.instructionsRailBtn.addEventListener("click", () => {
+  el.instructionsAccordion.open = !el.instructionsAccordion.open;
+});
+
+// Sync rail button active states with their accordion open states
+el.manualSection.addEventListener("toggle", () => {
+  el.panelToggle.classList.toggle("is-active", el.manualSection.open);
+  el.panelToggle.setAttribute("aria-pressed", String(el.manualSection.open));
+});
+el.instructionsAccordion.addEventListener("toggle", () => {
+  el.instructionsRailBtn.classList.toggle("is-active", el.instructionsAccordion.open);
+  el.instructionsRailBtn.setAttribute("aria-pressed", String(el.instructionsAccordion.open));
+});
+
 /* =========================
    INIT
 ========================= */
@@ -169,4 +223,5 @@ el.tryAgain.addEventListener("click", handleTryAgain);
 applyCurrentCase(state);
 createDebugPanel();
 initInstructions(el);
+initInstructionsAnimation();
 rerender();
