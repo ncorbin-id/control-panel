@@ -105,7 +105,7 @@ export function render(state, el, updateDebugPanel) {
     if (state.ui.testMode) {
       const current = state.app.caseIndex + 1;
       const total = cases.length;
-      el.caseDisplay.textContent = `Case ${current} of ${total}`;
+      el.caseDisplay.textContent = `Test ${current} of ${total}`;
       el.caseProgress.value = current / total;
     }
   }
