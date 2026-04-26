@@ -1,7 +1,5 @@
 export function getDomElements() {
   return {
-    appContainer: document.querySelector(".app"),
-
     spIndicator: document.getElementById("light-sp"),
     ebIndicator: document.getElementById("light-eb"),
     maIndicator: document.getElementById("light-ma"),
@@ -15,22 +13,26 @@ export function getDomElements() {
     resetPanel: document.getElementById("reset-panel"),
     testMe: document.getElementById("test-me"),
     panelMessage: document.getElementById("panel-message"),
+    helpButton: document.getElementById("help-button"),
 
     successNotification: document.getElementById("success-notification"),
     successMessage: document.getElementById("success-message"),
     successDismiss: document.getElementById("success-dismiss"),
 
-    manualSection: document.querySelector(".instruction-section.manual"),
-    taskInstructions: document.querySelector(".instruction-section.task .instructions"),
-
-    helpButton: document.getElementById("help-button"),
-
     panelToggle: document.getElementById("panel-toggle"),
-    instructionsRailBtn: document.getElementById("instructions-rail-btn"),
-    instructionsAccordion: document.getElementById("instructions-accordion"),
 
-    instructionsOverlay: document.getElementById("instructions-overlay"),
-    instructionsClose: document.getElementById("instructions-close"),
+    manualSection: document.querySelector(".instruction-section.manual"),
+    controlPanel: document.querySelector(".control-panel"),
+
+    tutorialSpotlight: document.getElementById("tutorial-spotlight"),
+    tutorialCard: document.getElementById("tutorial-card"),
+    tutorialBtn: document.getElementById("tutorial-btn"),
+    tutorialClose: document.getElementById("tutorial-close"),
+    tutorialRestartBtn: document.getElementById("tutorial-restart-btn"),
+
+    testModeStatus: document.getElementById("test-mode-status"),
+    caseDisplay: document.getElementById("case-display"),
+    caseProgress: document.getElementById("case-progress"),
 
     reflectionOverlay: document.getElementById("reflection-overlay"),
     reflectionGeneralHelp: document.getElementById("reflection-general-help"),

@@ -1,5 +1,5 @@
 import { isSelectorEnabled, areFireButtonsEnabled } from "./machine.js";
-import { getCurrentCase } from "./cases.js";
+import { getCurrentCase, cases } from "./cases.js";
 import { updateInstructionsUI } from "./instructions.js";
 
 const SUCCESS_MESSAGE_DEFAULT = "Phasers fired successfully.";
@@ -27,7 +27,7 @@ export function render(state, el, updateDebugPanel) {
      SP switch
   ========================= */
 
-  el.spSwitch.classList.toggle("on", state.machine.power);
+  el.spSwitch.selected = state.machine.power;
 
   /* =========================
      Selector position
@@ -94,6 +94,20 @@ export function render(state, el, updateDebugPanel) {
 
   if (el.helpButton) {
     el.helpButton.hidden = !state.ui.testMode;
+  }
+
+  /* =========================
+     Test mode status
+  ========================= */
+
+  if (el.testModeStatus) {
+    el.testModeStatus.hidden = !state.ui.testMode;
+    if (state.ui.testMode) {
+      const current = state.app.caseIndex + 1;
+      const total = cases.length;
+      el.caseDisplay.textContent = `Case ${current} of ${total}`;
+      el.caseProgress.value = current / total;
+    }
   }
 
   /* =========================

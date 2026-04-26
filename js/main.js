@@ -9,7 +9,6 @@ import {
 } from "./machine.js";
 import { render } from "./render.js";
 import { createDebugPanel, updateDebugPanel } from "./debug.js";
-import { initInstructions } from "./instructions.js";
 
 const STORAGE_KEY = "phaserTraining";
 
@@ -97,15 +96,12 @@ function handleReset() {
 function handleTestMe() {
   clearPanelMessage();
   state.ui.testMode = true;
+  document.body.classList.add("panel-collapsed");
   resetToCurrentCase();
 }
 
 function handleReflectionContinue() {
   el.reflectionOverlay.hidden = true;
-}
-
-function handlePanelToggle() {
-  el.manualSection.open = !el.manualSection.open;
 }
 
 function handleHelpRequested() {
@@ -116,50 +112,146 @@ function handleHelpRequested() {
 function handleTryAgain() {
   el.reflectionOverlay.hidden = true;
   state.ui.testMode = false;
+  document.body.classList.remove("panel-collapsed");
   setCase(state, 0);
-  el.manualSection.setAttribute("open", "");
   resetToCurrentCase();
 }
 
 /* =========================
-   INITIAL INSTRUCTIONS ANIMATION
+   TUTORIAL
 ========================= */
 
-function initInstructionsAnimation() {
-  const card = el.instructionsOverlay.querySelector(".instructions-card");
-  let dismissed = false;
+function initTutorial() {
+  const steps = Array.from(el.tutorialCard.querySelectorAll(".tutorial-step"));
+  const total = steps.length;
+  let current = 0;
 
-  function onDismissed() {
-    if (dismissed) return;
-    dismissed = true;
-    el.instructionsOverlay.classList.add("is-closed");
-    el.instructionsOverlay.classList.remove("fly-away");
-    el.instructionsAccordion.open = true;
-    el.instructionsRailBtn.classList.add("pulse");
-    setTimeout(() => el.instructionsRailBtn.classList.remove("pulse"), 1500);
-  }
-
-  function dismiss() {
-    el.instructionsOverlay.classList.add("fly-away");
-    if (card) {
-      card.addEventListener("animationend", onDismissed, { once: true });
-    }
-    setTimeout(onDismissed, 800);
-  }
-
-  const autoTimer = setTimeout(dismiss, 3000);
-
-  el.instructionsClose.addEventListener("click", () => {
-    clearTimeout(autoTimer);
-    dismiss();
+  const dotsContainer = el.tutorialCard.querySelector(".tutorial-dots");
+  steps.forEach(() => {
+    const dot = document.createElement("div");
+    dot.className = "tutorial-dot";
+    dotsContainer.appendChild(dot);
   });
+  const dots = Array.from(dotsContainer.querySelectorAll(".tutorial-dot"));
+
+  function positionSpotlight(target) {
+    if (!target) {
+      el.tutorialSpotlight.hidden = true;
+      return;
+    }
+    const pad = 6;
+    const rect = target.getBoundingClientRect();
+    el.tutorialSpotlight.style.top    = `${rect.top    - pad}px`;
+    el.tutorialSpotlight.style.left   = `${rect.left   - pad}px`;
+    el.tutorialSpotlight.style.width  = `${rect.width  + pad * 2}px`;
+    el.tutorialSpotlight.style.height = `${rect.height + pad * 2}px`;
+    el.tutorialSpotlight.hidden = false;
+  }
+
+  function positionCard(target, placement) {
+    const card = el.tutorialCard;
+    const margin = 16;
+    const pad = 8;
+
+    if (!target) {
+      card.style.top = "50%";
+      card.style.left = "50%";
+      card.style.transform = "translate(-50%, -50%)";
+      return;
+    }
+
+    card.style.transform = "";
+    const rect = target.getBoundingClientRect();
+    const cardW = card.offsetWidth || 300;
+    const cardH = card.offsetHeight || 140;
+
+    let top, left;
+
+    switch (placement) {
+      case "right":
+        left = rect.right + pad + margin;
+        top  = rect.top;
+        break;
+      case "left":
+        left = rect.left - cardW - pad - margin;
+        top  = rect.top;
+        break;
+      case "above":
+        top  = rect.top - cardH - pad - margin;
+        left = rect.left;
+        break;
+      default: // below
+        top  = rect.bottom + pad + margin;
+        left = rect.left;
+    }
+
+    left = Math.max(margin, Math.min(left, window.innerWidth  - cardW - margin));
+    top  = Math.max(margin, Math.min(top,  window.innerHeight - cardH - margin));
+
+    card.style.top  = `${top}px`;
+    card.style.left = `${left}px`;
+  }
+
+  const arrowClassMap = {
+    right: "arrow-left",
+    left:  "arrow-right",
+    above: "arrow-down",
+    below: "arrow-up"
+  };
+
+  function showStep(index) {
+    steps.forEach((step, i) => step.classList.toggle("is-active", i === index));
+    dots.forEach((dot,  i) => dot.classList.toggle("is-active",  i === index));
+    el.tutorialBtn.textContent = index === total - 1 ? "Continue" : "Next";
+
+    const target    = el[steps[index].dataset.target]    ?? null;
+    const placement = steps[index].dataset.placement ?? "below";
+
+    el.tutorialCard.classList.remove("arrow-left", "arrow-right", "arrow-up", "arrow-down");
+    if (arrowClassMap[placement]) {
+      el.tutorialCard.classList.add(arrowClassMap[placement]);
+    }
+
+    positionSpotlight(target);
+    positionCard(target, placement);
+  }
+
+  function restart() {
+    current = 0;
+    el.tutorialCard.hidden = false;
+    showStep(0);
+  }
+
+  el.tutorialBtn.addEventListener("click", () => {
+    if (current < total - 1) {
+      current += 1;
+      showStep(current);
+    } else {
+      el.tutorialCard.hidden = true;
+      el.tutorialSpotlight.hidden = true;
+    }
+  });
+
+  el.tutorialClose.addEventListener("click", () => {
+    el.tutorialCard.hidden = true;
+    el.tutorialSpotlight.hidden = true;
+  });
+
+  el.tutorialRestartBtn.addEventListener("click", restart);
+
+  el.tutorialCard.hidden = false;
+  showStep(0);
 }
 
 /* =========================
    MACHINE INTERACTIONS
 ========================= */
 
-el.spSwitch.addEventListener("click", () => {
+el.panelToggle.addEventListener("click", () => {
+  document.body.classList.toggle("panel-collapsed");
+});
+
+el.spSwitch.addEventListener("change", () => {
   clearPanelMessage();
   togglePower(state, rerender);
   rerender();
@@ -201,27 +293,11 @@ el.helpButton.addEventListener("click", handleHelpRequested);
 el.reflectionContinue.addEventListener("click", handleReflectionContinue);
 el.tryAgain.addEventListener("click", handleTryAgain);
 
-el.panelToggle.addEventListener("click", handlePanelToggle);
-el.instructionsRailBtn.addEventListener("click", () => {
-  el.instructionsAccordion.open = !el.instructionsAccordion.open;
-});
-
-// Sync rail button active states with their accordion open states
-el.manualSection.addEventListener("toggle", () => {
-  el.panelToggle.classList.toggle("is-active", el.manualSection.open);
-  el.panelToggle.setAttribute("aria-pressed", String(el.manualSection.open));
-});
-el.instructionsAccordion.addEventListener("toggle", () => {
-  el.instructionsRailBtn.classList.toggle("is-active", el.instructionsAccordion.open);
-  el.instructionsRailBtn.setAttribute("aria-pressed", String(el.instructionsAccordion.open));
-});
-
 /* =========================
    INIT
 ========================= */
 
 applyCurrentCase(state);
 createDebugPanel();
-initInstructions(el);
-initInstructionsAnimation();
+initTutorial();
 rerender();
