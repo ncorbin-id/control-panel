@@ -265,6 +265,12 @@ body.panel-collapsed .panel-content {
   gap: 10px;
 }
 
+.panel-actions md-outlined-button {
+  --md-outlined-button-label-text-font: 'Roboto', sans-serif;
+  --md-outlined-button-label-text-size: clamp(9pt, 1.3vw, 14pt);
+  --md-outlined-button-label-text-weight: 400;
+}
+
 .panel-message {
   min-height: 1.25rem;
   margin: 0;
@@ -320,6 +326,8 @@ body.panel-collapsed .panel-content {
   --md-slider-handle-height: 36px;
   --md-slider-handle-width: 36px;
   --md-slider-with-tick-marks-container-size: 6px;
+  --md-slider-active-track-color: var(--md-sys-color-surface-container-highest);
+  --md-slider-with-tick-marks-active-container-color: var(--md-sys-color-on-surface-variant);
 }
 
 /* =========================
@@ -378,6 +386,7 @@ body.panel-collapsed .panel-content {
   --md-switch-with-icon-handle-height: 48px;
   --md-switch-pressed-handle-width: 56px;
   --md-switch-pressed-handle-height: 56px;
+  --md-switch-selected-icon-size: 32px;
 }
 
 #fire-main,
