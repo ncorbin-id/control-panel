@@ -57,12 +57,46 @@ function setStoredData(data) {
    BUTTON HANDLERS
 ========================= */
 
+const REFLECTION_STEPS = {
+  help: [
+    { heading: "Something's up", body: "It seems like you've encountered a system malfunction. Something on the control panel isn't operating as expected. But do you know why?" },
+    { heading: "Something's up", body: "When we learn new systems by memorizing procedures, we risk limiting our ability to think creatively and strategically about what to do when things go off track." },
+    { heading: "Something's up", body: "Next, you'll try learning this system again using a different approach." },
+  ],
+  solved: [
+    { heading: "You got it, but how?", body: "You experienced a system malfunction. The MA Indicator didn't illuminate, but you found a way to fire phasers. But do you understand why that worked, or was it a lucky guess?" },
+    { heading: "You got it, but how?", body: "When we learn new systems by memorizing procedures, we risk limiting our ability to think creatively and strategically about what to do when things go off track." },
+    { heading: "You got it, but how?", body: "Next, you'll try learning this system again using a different approach." },
+  ],
+};
+
+let reflectionSteps = [];
+let reflectionStep = 0;
+
+function renderReflectionStep() {
+  const stepData = reflectionSteps[reflectionStep];
+  el.reflectionStepContent.innerHTML =
+    `<h3 class="reflection-heading">${stepData.heading}</h3><p class="reflection-body">${stepData.body}</p>`;
+  Array.from(el.reflectionDots.querySelectorAll(".reflection-dot")).forEach((dot, i) => {
+    dot.classList.toggle("is-active", i === reflectionStep);
+  });
+  el.reflectionNext.textContent = reflectionStep === reflectionSteps.length - 1 ? "Try again" : "Next";
+}
+
 function showReflection(path) {
-  el.reflectionGeneralHelp.hidden = path !== "general-help";
-  el.reflectionSolved.hidden = path !== "solved";
-  el.reflectionHelp.hidden = path !== "help";
-  el.reflectionContinue.hidden = path !== "general-help";
-  el.tryAgain.hidden = path === "general-help";
+  const isStepPath = path === "help" || path === "solved";
+  el.reflectionGeneralHelp.hidden = isStepPath;
+  el.reflectionStepsPanel.hidden = !isStepPath;
+
+  if (isStepPath) {
+    reflectionSteps = REFLECTION_STEPS[path];
+    reflectionStep = 0;
+    el.reflectionDots.innerHTML = reflectionSteps.map(() =>
+      `<div class="reflection-dot"></div>`
+    ).join("");
+    renderReflectionStep();
+  }
+
   el.reflectionOverlay.hidden = false;
 }
 
@@ -208,12 +242,19 @@ function initTutorial() {
     const placement = steps[index].dataset.placement ?? "below";
 
     el.tutorialCard.classList.remove("arrow-left", "arrow-right", "arrow-up", "arrow-down");
-    if (arrowClassMap[placement]) {
+    if (target && arrowClassMap[placement]) {
       el.tutorialCard.classList.add(arrowClassMap[placement]);
     }
 
+    el.tutorialOverlay.hidden = target !== null;
     positionSpotlight(target);
     positionCard(target, placement);
+  }
+
+  function closeTutorial() {
+    el.tutorialCard.hidden = true;
+    el.tutorialSpotlight.hidden = true;
+    el.tutorialOverlay.hidden = true;
   }
 
   function restart() {
@@ -231,15 +272,11 @@ function initTutorial() {
       current += 1;
       showStep(current);
     } else {
-      el.tutorialCard.hidden = true;
-      el.tutorialSpotlight.hidden = true;
+      closeTutorial();
     }
   });
 
-  el.tutorialClose.addEventListener("click", () => {
-    el.tutorialCard.hidden = true;
-    el.tutorialSpotlight.hidden = true;
-  });
+  el.tutorialClose.addEventListener("click", closeTutorial);
 
   el.tutorialRestartBtn.addEventListener("click", restart);
 
@@ -295,7 +332,14 @@ el.resetPanel.addEventListener("click", handleReset);
 el.testMe.addEventListener("click", handleTestMe);
 el.helpButton.addEventListener("click", handleHelpRequested);
 el.reflectionContinue.addEventListener("click", handleReflectionContinue);
-el.tryAgain.addEventListener("click", handleTryAgain);
+el.reflectionNext.addEventListener("click", () => {
+  if (reflectionStep < reflectionSteps.length - 1) {
+    reflectionStep += 1;
+    renderReflectionStep();
+  } else {
+    handleTryAgain();
+  }
+});
 
 /* =========================
    INIT

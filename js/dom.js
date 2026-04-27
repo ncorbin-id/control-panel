@@ -24,6 +24,7 @@ export function getDomElements() {
     manualSection: document.querySelector(".instruction-section.manual"),
     controlPanel: document.querySelector(".control-panel"),
 
+    tutorialOverlay: document.getElementById("tutorial-overlay"),
     tutorialSpotlight: document.getElementById("tutorial-spotlight"),
     tutorialCard: document.getElementById("tutorial-card"),
     tutorialBtn: document.getElementById("tutorial-btn"),
@@ -36,9 +37,10 @@ export function getDomElements() {
 
     reflectionOverlay: document.getElementById("reflection-overlay"),
     reflectionGeneralHelp: document.getElementById("reflection-general-help"),
-    reflectionSolved: document.getElementById("reflection-solved"),
-    reflectionHelp: document.getElementById("reflection-help"),
-    reflectionContinue: document.getElementById("reflection-continue"),
-    tryAgain: document.getElementById("try-again")
+    reflectionStepsPanel: document.getElementById("reflection-steps-panel"),
+    reflectionStepContent: document.getElementById("reflection-step-content"),
+    reflectionDots: document.getElementById("reflection-dots"),
+    reflectionNext: document.getElementById("reflection-next"),
+    reflectionContinue: document.getElementById("reflection-continue")
   };
 }

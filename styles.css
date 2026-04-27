@@ -23,7 +23,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Roboto Slab', Arial, sans-serif;
 }
 
-h1 { font-size: 2.8rem; font-weight: 400; line-height: 1.1; }
+h1 { font-size: 2.24rem; font-weight: 400; line-height: 1.1; }
 h2 { font-size: 2rem; font-weight: 400; line-height: 1.5; }
 h3 { font-size: 1.5rem; font-weight: 400; line-height: 1.3; }
 
@@ -414,13 +414,42 @@ body.panel-collapsed .panel-content {
 ========================= */
 
 .tutorial-restart-btn {
-  margin-top: auto;
   margin-bottom: 12px;
   flex-shrink: 0;
   --md-icon-button-container-size: 40px;
   --md-icon-button-icon-size: 20px;
   --md-icon-button-icon-color: rgba(0, 0, 0, 0.5);
   --md-icon-button-hover-icon-color: rgba(0, 0, 0, 0.75);
+}
+
+.rail-btn-wrap {
+  position: relative;
+}
+
+.rail-btn-wrap:has(.tutorial-restart-btn) {
+  margin-top: auto;
+}
+
+[data-guidance="locked"] .rail-btn-wrap::after {
+  content: "Disabled during testing";
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 100;
+}
+
+[data-guidance="locked"] .rail-btn-wrap:hover::after {
+  opacity: 1;
 }
 
 .tutorial-close {
@@ -436,6 +465,14 @@ body.panel-collapsed .panel-content {
 /* =========================
    Tutorial card
 ========================= */
+
+.tutorial-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 200;
+  pointer-events: none;
+}
 
 .tutorial-spotlight {
   position: fixed;
@@ -462,12 +499,18 @@ body.panel-collapsed .panel-content {
 /* rotated-square arrow pointer */
 .tutorial-card::before {
   content: "";
+  display: none;
   position: absolute;
   width: 12px;
   height: 12px;
   background: white;
   transform: rotate(45deg);
 }
+
+.tutorial-card.arrow-left::before,
+.tutorial-card.arrow-right::before,
+.tutorial-card.arrow-up::before,
+.tutorial-card.arrow-down::before  { display: block; }
 
 .tutorial-card.arrow-left::before  { left: -6px;   top: 22px;    box-shadow: -2px  2px 4px rgba(0, 0, 0, 0.1); }
 .tutorial-card.arrow-right::before { right: -6px;  top: 22px;    box-shadow:  2px -2px 4px rgba(0, 0, 0, 0.1); }
@@ -551,6 +594,33 @@ body.panel-collapsed .panel-content {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.reflection-step-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.reflection-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.reflection-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #d0d0d0;
+  transition: background 0.2s ease;
+}
+
+.reflection-dot.is-active {
+  background: var(--md-sys-color-primary);
 }
 
 /* =========================

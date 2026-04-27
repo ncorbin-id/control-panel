@@ -24,13 +24,18 @@
     <!-- Instruction panel -->
     <aside class="instruction-panel">
       <div class="panel-rail">
-        <md-icon-button id="panel-toggle" class="panel-toggle" aria-label="Toggle instruction panel"><md-icon>menu</md-icon></md-icon-button>
-        <md-icon-button id="tutorial-restart-btn" class="tutorial-restart-btn" aria-label="Re-launch the tutorial" title="Re-launch the tutorial"><md-icon>help</md-icon></md-icon-button>
+        <div class="rail-btn-wrap">
+          <md-icon-button id="panel-toggle" class="panel-toggle" aria-label="Toggle instruction panel"><md-icon>menu</md-icon></md-icon-button>
+        </div>
+        <div class="rail-btn-wrap">
+          <md-icon-button id="tutorial-restart-btn" class="tutorial-restart-btn" aria-label="Re-launch the tutorial" title="Re-launch the tutorial"><md-icon>help</md-icon></md-icon-button>
+        </div>
       </div>
       <div class="panel-content">
         <div class="instruction-section manual">
           <div class="instructions">
             <h1>Control Panel Instruction Manual</h1>
+            <md-divider></md-divider>
             <h2>Phasers</h2>
             <p>This section of the control panel is used to bring the phaser system online, manage power during operation, and fire phasers. Note that this system can sometimes malfunction.</p>
             <h3>Fire phasers</h3>
@@ -131,13 +136,17 @@
 
   </div>
 
-  <!-- Tutorial: spotlight + floating card -->
+  <!-- Tutorial: overlay + spotlight + floating card -->
+  <div id="tutorial-overlay" class="tutorial-overlay" hidden></div>
   <div id="tutorial-spotlight" class="tutorial-spotlight" hidden></div>
   <div id="tutorial-card" class="tutorial-card" hidden>
     <md-icon-button id="tutorial-close" class="tutorial-close" aria-label="Close tutorial"><md-icon>close</md-icon></md-icon-button>
     <div class="tutorial-steps-content">
+      <div class="tutorial-step">
+        Your task is to fire phasers aboard a starship.
+      </div>
       <div class="tutorial-step" data-target="manualSection" data-placement="right">
-        Your task is to fire phasers aboard a starship. Read through the <b>Control Panel Instruction Manual</b> and familiarize yourself with the control panel.
+        Read through the <b>Control Panel Instruction Manual</b> and familiarize yourself with the control panel.
       </div>
       <div class="tutorial-step" data-target="controlPanel" data-placement="left">
         Practice firing phasers a few times on your own.
@@ -166,22 +175,16 @@
           <li>Set the <strong>ES Selector</strong> to <strong>MA</strong>.</li>
           <li>Select the <strong>FM</strong> button.</li>
         </ol>
+        <div class="reflection-actions">
+          <md-filled-button id="reflection-continue">Continue</md-filled-button>
+        </div>
       </div>
-      <div id="reflection-solved" hidden>
-        <h2 class="reflection-heading">You got it, but how?</h2>
-        <p class="reflection-body">You experienced a system malfunction. The MA Indicator didn't illuminate, but you found a way to fire phasers. But do you understand why that worked, or was it a lucky guess?</p>
-        <p class="reflection-body">When we learn new systems by memorizing procedures, we risk limiting our ability to think creatively and strategically about what to do when things go off track.</p>
-        <p class="reflection-body">Next, you'll try learning this system again using a different approach.</p>
-      </div>
-      <div id="reflection-help" hidden>
-        <h2 class="reflection-heading">Something's up.</h2>
-        <p class="reflection-body">It seems like you've encountered a system malfunction. Something on the control panel isn't operating as expected. But do you know why?</p>
-        <p class="reflection-body">When we learn new systems by memorizing procedures, we risk limiting our ability to think creatively and strategically about what to do when things go off track.</p>
-        <p class="reflection-body">Next, you'll try learning this system again using a different approach.</p>
-      </div>
-      <div class="reflection-actions">
-        <md-filled-button id="reflection-continue" hidden>Continue</md-filled-button>
-        <md-filled-button id="try-again" hidden>Try again</md-filled-button>
+      <div id="reflection-steps-panel" hidden>
+        <div id="reflection-step-content"></div>
+        <div class="reflection-step-footer">
+          <div id="reflection-dots" class="reflection-dots"></div>
+          <md-filled-button id="reflection-next">Next</md-filled-button>
+        </div>
       </div>
     </div>
   </div>
