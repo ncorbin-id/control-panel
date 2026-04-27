@@ -3,7 +3,7 @@ import { getDomElements } from "./dom.js";
 import { applyCurrentCase, setCase, nextCase, getCurrentCase } from "./cases.js";
 import {
   togglePower,
-  cycleSelector,
+  setSelector,
   evaluateFire,
   resetMachine
 } from "./machine.js";
@@ -217,9 +217,13 @@ function initTutorial() {
   }
 
   function restart() {
-    current = 0;
-    el.tutorialCard.hidden = false;
-    showStep(0);
+    document.body.classList.remove("panel-collapsed");
+    // Wait for panel animation to complete before showing tutorial
+    setTimeout(() => {
+      current = 0;
+      el.tutorialCard.hidden = false;
+      showStep(0);
+    }, 350);
   }
 
   el.tutorialBtn.addEventListener("click", () => {
@@ -257,9 +261,9 @@ el.spSwitch.addEventListener("change", () => {
   rerender();
 });
 
-el.esSelector.addEventListener("click", () => {
+el.esSelector.addEventListener("input", () => {
   clearPanelMessage();
-  cycleSelector(state);
+  setSelector(state, parseInt(el.esSelector.value, 10));
   rerender();
 });
 

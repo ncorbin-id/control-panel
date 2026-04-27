@@ -1,7 +1,7 @@
-export const selectorPositions = ["MA", "SA", "N"];
+export const selectorPositions = ["N", "MA", "MS"];
 
 export function getChargedSource(state) {
-  return state.caseData.machineState === "maFailure" ? "SA" : "MA";
+  return state.caseData.machineState === "maFailure" ? "MS" : "MA";
 }
 
 export function isSelectorEnabled(state) {
@@ -66,13 +66,9 @@ export function togglePower(state, onReady) {
   resetMachine(state);
 }
 
-export function cycleSelector(state) {
+export function setSelector(state, index) {
   if (!isSelectorEnabled(state)) return;
-
-  const currentIndex = selectorPositions.indexOf(state.machine.selector);
-  const nextIndex = (currentIndex + 1) % selectorPositions.length;
-
-  state.machine.selector = selectorPositions[nextIndex];
+  state.machine.selector = selectorPositions[index] ?? "N";
   state.machine.pfLit = false;
 }
 
@@ -83,8 +79,8 @@ export function evaluateFire(state, buttonType) {
     (state.machine.chargedSource === "MA" &&
       state.machine.selector === "MA" &&
       buttonType === "FM") ||
-    (state.machine.chargedSource === "SA" &&
-      state.machine.selector === "SA" &&
+    (state.machine.chargedSource === "MS" &&
+      state.machine.selector === "MS" &&
       buttonType === "FS");
 
   state.machine.pfLit = correct;

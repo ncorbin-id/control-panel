@@ -53,6 +53,7 @@
     <main class="panel-stage">
       <section class="control-panel" aria-label="Phaser control panel">
         <div class="panel-canvas">
+
           <div class="panel-actions">
             <div class="action-buttons">
               <md-outlined-button id="reset-panel">Reset</md-outlined-button>
@@ -60,46 +61,62 @@
               <md-outlined-button id="help-button" hidden>I need help</md-outlined-button>
             </div>
             <p id="panel-message" class="panel-message" aria-live="polite"></p>
-            <div id="success-notification" class="success-notification" hidden>
-              <p id="success-message"></p>
-              <md-filled-button id="success-dismiss">OK</md-filled-button>
+          </div>
+
+          <!-- Indicators -->
+          <div class="indicators-row">
+            <div class="indicators-cluster">
+              <div id="light-sp" class="indicator"><h3>SP</h3></div>
+              <div id="light-eb" class="indicator"><h3>EB</h3></div>
+              <div id="light-ma" class="indicator"><h3>MA</h3></div>
+            </div>
+            <div class="indicators-cluster">
+              <div id="light-pf" class="indicator"><h3>PF</h3></div>
             </div>
           </div>
 
-          <!-- SP Indicator -->
-          <div class="panel-item sp-indicator-group">
-            <div id="light-sp" class="indicator">SP</div>
+          <!-- Control surface -->
+          <div class="control-surface">
+
+            <!-- SP Switch -->
+            <div class="control-group sp-switch-group">
+              <md-switch id="toggle-sp" icons show-only-selected-icon aria-label="SP Switch"></md-switch>
+              <div class="panel-label">SP Switch</div>
+            </div>
+
+            <!-- ES Selector -->
+            <div class="control-group es-selector-group">
+              <div class="slider-shell">
+                <div class="slider-labels" aria-hidden="true">
+                  <span>N</span>
+                  <span>MA</span>
+                  <span>MS</span>
+                </div>
+                <md-slider
+                  id="es-selector"
+                  min="0"
+                  max="2"
+                  step="1"
+                  ticks
+                  value="0"
+                  aria-label="ES Selector"
+                ></md-slider>
+              </div>
+              <div class="panel-label es-label">ES Selector</div>
+            </div>
+
+            <!-- FM / FS Buttons -->
+            <div class="control-group fire-buttons-group">
+              <md-elevated-button id="fire-main">FM</md-elevated-button>
+              <md-elevated-button id="fire-secondary">FS</md-elevated-button>
+            </div>
+
           </div>
 
-          <!-- EB Indicator -->
-          <div class="panel-item eb-indicator-group">
-            <div id="light-eb" class="indicator">EB</div>
-          </div>
-
-          <!-- MA Indicator -->
-          <div class="panel-item ma-indicator-group">
-            <div id="light-ma" class="indicator">MA</div>
-          </div>
-
-          <!-- PF Indicator -->
-          <div class="panel-item pf-indicator-group">
-            <div id="light-pf" class="indicator">PF</div>
-          </div>
-
-          <!-- SP Switch -->
-          <div class="panel-item sp-switch-group">
-            <md-switch id="toggle-sp" icons show-only-selected-icon aria-label="SP Switch"></md-switch>
-            <div class="panel-label">SP Switch</div>
-          </div>
-
-          <!-- FM Button -->
-          <div class="panel-item fm-button-group">
-            <md-elevated-button id="fire-main">FM</md-elevated-button>
-          </div>
-
-          <!-- FS Button -->
-          <div class="panel-item fs-button-group">
-            <md-elevated-button id="fire-secondary">FS</md-elevated-button>
+          <!-- Success notification -->
+          <div id="success-notification" class="success-notification" hidden>
+            <p id="success-message"></p>
+            <md-filled-button id="success-dismiss">OK</md-filled-button>
           </div>
 
           <!-- Test mode status -->
@@ -108,28 +125,6 @@
             <md-linear-progress id="case-progress"></md-linear-progress>
           </div>
 
-          <!-- ES Selector -->
-          <div class="panel-item es-selector-group">
-            <div class="selector-shell">
-              <div class="selector-option option-ma">MA</div>
-              <div class="selector-option option-sa">SA</div>
-              <div class="selector-option option-n">N</div>
-              <div class="dial-wrap">
-                <button
-                  id="es-selector"
-                  class="dial"
-                  type="button"
-                  aria-label="ES Selector"
-                  aria-valuemin="0"
-                  aria-valuemax="2"
-                  aria-valuenow="2"
-                >
-                  <span class="dial-pointer"></span>
-                </button>
-              </div>
-            </div>
-            <div class="panel-label es-label">ES Selector</div>
-          </div>
         </div>
       </section>
     </main>

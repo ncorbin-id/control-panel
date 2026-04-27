@@ -138,38 +138,34 @@ body.panel-collapsed .panel-content {
   flex: 1;
   min-width: 0;
   padding: 16px;
+  display: flex;
+  flex-direction: column;
 }
 
 .control-panel {
+  flex: 1;
   width: 100%;
   background: transparent;
   border-radius: 0;
   padding: 16px;
+  display: flex;
+  flex-direction: column;
 }
 
 .panel-canvas {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  min-height: 320px;
-  max-height: calc(100vh - 32px);
-  background: transparent;
-  overflow: visible;
-}
-
-.panel-item {
-  position: absolute;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  transform: translate(-50%, -50%);
+  gap: 20px;
+  width: 100%;
 }
 
 .panel-label {
-  font-size: clamp(0.85rem, 1.2vw, 1rem);
+  font-size: inherit;
   line-height: 1.2;
-  margin-top: 0.6rem;
+  margin-top: 0.5rem;
   white-space: nowrap;
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 /* =========================
@@ -177,18 +173,15 @@ body.panel-collapsed .panel-content {
 ========================= */
 
 .indicator {
-  width: clamp(42px, 5.2vw, 78px);
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
+  width: clamp(44px, 5.5vw, 72px);
+  height: clamp(44px, 5.5vw, 72px);
+  border-radius: 50% 50% 10px 10px / 55% 55% 10px 10px;
   border: 2px solid var(--md-sys-color-outline);
   background: transparent;
   opacity: 0.28;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(0.6rem, 0.95vw, 0.95rem);
-  font-weight: 700;
-  letter-spacing: 0.04em;
   color: var(--md-sys-color-on-surface-variant);
   transition:
     opacity 0.25s ease,
@@ -197,6 +190,10 @@ body.panel-collapsed .panel-content {
     filter 0.25s ease,
     transform 0.25s ease,
     color 0.25s ease;
+}
+
+.indicator h3 {
+  margin: 0;
 }
 
 .indicator.on {
@@ -263,7 +260,6 @@ body.panel-collapsed .panel-content {
 ========================= */
 
 .panel-actions {
-  margin-top: 16px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -288,110 +284,120 @@ body.panel-collapsed .panel-content {
   gap: 10px;
 }
 
+.success-notification {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
 /* =========================
-   Dial / ES Selector
+   ES Selector slider
 ========================= */
 
-.selector-shell {
-  position: relative;
-  width: clamp(140px, 18vw, 250px);
-  aspect-ratio: 1 / 1;
-}
-
-.dial-wrap {
-  position: absolute;
-  inset: 0;
+.slider-shell {
+  width: 100%;
+  min-width: clamp(160px, 18vw, 280px);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
 }
 
-.dial {
-  position: relative;
-  width: 76%;
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  border: none;
-  background: var(--md-sys-color-surface-container-low);
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
-  cursor: pointer;
-  transition:
-    opacity 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.15s ease;
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 12px;
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface-variant);
+  line-height: 1;
+  margin-bottom: 2px;
 }
 
-.dial:hover:not(:disabled) {
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+.es-label { margin-top: 0.2rem; }
+
+#es-selector {
+  --md-slider-active-track-height: 32px;
+  --md-slider-inactive-track-height: 32px;
+  --md-slider-handle-height: 36px;
+  --md-slider-handle-width: 36px;
+  --md-slider-with-tick-marks-container-size: 6px;
 }
-
-.dial:active:not(:disabled) {
-  transform: scale(0.99);
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
-}
-
-.dial:disabled {
-  opacity: 0.38;
-  pointer-events: none;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-.dial-pointer {
-  position: absolute;
-  width: 0;
-  height: 0;
-  left: 50%;
-  top: 50%;
-  transform-origin: 0 0;
-  border-top: clamp(8px, 1vw, 16px) solid transparent;
-  border-bottom: clamp(8px, 1vw, 16px) solid transparent;
-  border-left: clamp(34px, 4.5vw, 64px) solid var(--md-sys-color-primary);
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
-}
-
-.dial.pos-ma .dial-pointer { transform: translate(-8px, -8px) rotate(-65deg); }
-.dial.pos-sa .dial-pointer { transform: translate(-8px, -8px) rotate(0deg); }
-.dial.pos-n  .dial-pointer { transform: translate(-8px, -8px) rotate(58deg); }
-
-.selector-option {
-  position: absolute;
-  font-size: clamp(0.95rem, 1.4vw, 1.15rem);
-}
-
-.option-ma { top: 12%; right: 23%; }
-.option-sa { top: 41%; right:  2%; }
-.option-n  { bottom: 12%; right: 7%; }
-
-.es-label { margin-top: 0.8rem; }
 
 /* =========================
    Panel canvas layout
 ========================= */
 
-.sp-indicator-group { left: 10%; top: 38%; }
-.eb-indicator-group { left: 31%; top: 15%; }
-.ma-indicator-group { left: 49%; top: 15%; }
-.pf-indicator-group { left: 88%; top: 28%; }
-.sp-switch-group    { left: 10%; top: 72%; }
-.es-selector-group  { left: 49%; top: 66%; }
-.fm-button-group    { left: 83%; top: 66%; }
-.fs-button-group    { left: 96%; top: 66%; }
+.indicators-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+}
+
+.indicators-cluster {
+  display: flex;
+  gap: clamp(8px, 1.2vw, 18px);
+  align-items: center;
+}
+
+.control-surface {
+  background: var(--md-sys-color-surface-container);
+  border-radius: 20px;
+  padding: clamp(20px, 3vw, 40px) clamp(24px, 4vw, 56px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(16px, 2.5vw, 40px);
+  font-size: inherit;
+  --md-elevated-button-label-text-size: 1em;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.es-selector-group {
+  flex: 1;
+  max-width: 50%;
+}
+
+.fire-buttons-group {
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sp-switch-group #toggle-sp {
+  --md-switch-track-width: 156px;
+  --md-switch-track-height: 64px;
+  --md-switch-handle-width: 32px;
+  --md-switch-handle-height: 32px;
+  --md-switch-selected-handle-width: 48px;
+  --md-switch-selected-handle-height: 48px;
+  --md-switch-with-icon-handle-width: 48px;
+  --md-switch-with-icon-handle-height: 48px;
+  --md-switch-pressed-handle-width: 56px;
+  --md-switch-pressed-handle-height: 56px;
+}
+
+#fire-main,
+#fire-secondary {
+  --md-elevated-button-container-height: 60px;
+  --md-elevated-button-leading-space: 36px;
+  --md-elevated-button-trailing-space: 36px;
+}
 
 /* =========================
    Test mode status
 ========================= */
 
 .test-mode-status {
-  position: absolute;
-  bottom: 6%;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
   text-align: center;
+  margin-top: auto;
 }
 
 .test-mode-status h1 {
@@ -557,11 +563,6 @@ body.panel-collapsed .panel-content {
   }
 
   .control-panel { padding: 12px; }
-  .panel-canvas  { aspect-ratio: 4 / 3; }
-
-  .pf-indicator-group { left: 84%; }
-  .fm-button-group    { left: 78%; top: 70%; }
-  .fs-button-group    { left: 90%; top: 70%; }
 }
 
 /* =========================
@@ -580,21 +581,22 @@ body.panel-collapsed .panel-content {
     border-radius: 10px;
   }
 
-  .panel-canvas {
-    aspect-ratio: 3 / 4;
-    min-height: 560px;
+  .control-surface {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+
+  .control-group {
+    align-items: center;
+  }
+
+  .fire-buttons-group {
+    flex-direction: row;
+    justify-content: center;
   }
 
   .action-buttons { flex-direction: column; }
-
-  .sp-indicator-group { left: 16%; top: 20%; }
-  .eb-indicator-group { left: 38%; top: 10%; }
-  .ma-indicator-group { left: 62%; top: 10%; }
-  .pf-indicator-group { left: 82%; top: 18%; }
-  .sp-switch-group    { left: 16%; top: 52%; }
-  .es-selector-group  { left: 50%; top: 58%; }
-  .fm-button-group    { left: 70%; top: 50%; }
-  .fs-button-group    { left: 86%; top: 50%; }
 
   .panel-label { font-size: 0.82rem; }
 }

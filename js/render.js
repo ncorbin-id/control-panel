@@ -33,21 +33,8 @@ export function render(state, el, updateDebugPanel) {
      Selector position
   ========================= */
 
-  el.esSelector.classList.remove("pos-ma", "pos-sa", "pos-n");
-
-  if (state.machine.selector === "MA") {
-    el.esSelector.classList.add("pos-ma");
-    el.esSelector.setAttribute("aria-valuenow", "0");
-    el.esSelector.setAttribute("aria-valuetext", "Main Accumulator");
-  } else if (state.machine.selector === "SA") {
-    el.esSelector.classList.add("pos-sa");
-    el.esSelector.setAttribute("aria-valuenow", "1");
-    el.esSelector.setAttribute("aria-valuetext", "Secondary Accumulator");
-  } else {
-    el.esSelector.classList.add("pos-n");
-    el.esSelector.setAttribute("aria-valuenow", "2");
-    el.esSelector.setAttribute("aria-valuetext", "Neutral");
-  }
+  const selectorIndex = { N: 0, MA: 1, MS: 2 };
+  el.esSelector.value = selectorIndex[state.machine.selector] ?? 0;
 
   /* =========================
      Enable / disable controls
@@ -59,7 +46,6 @@ export function render(state, el, updateDebugPanel) {
 
   el.spSwitch.disabled = locked;
   el.esSelector.disabled = !selectorEnabled;
-  el.esSelector.setAttribute("aria-disabled", selectorEnabled ? "false" : "true");
 
   el.fmButton.disabled = !fireEnabled;
   el.fsButton.disabled = !fireEnabled;
